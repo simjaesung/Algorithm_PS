@@ -16,14 +16,8 @@ int main(void) {
     while (1) {
         cin >> c1 >> c2;
         if (cin.eof()) break;
-        if (c1 <= t1) {
-            if (before.find(c2) == before.end())
-                before[c2] = 1;
-        }
-
-        if (c1 >= t2 && c1 <= t3)
-            if (after.find(c2) == after.end())
-                after[c2] = 1;
+        if (c1 <= t1) before[c2] = 1;
+        if (c1 >= t2 && c1 <= t3) after[c2] = 1;
     }
 
 
