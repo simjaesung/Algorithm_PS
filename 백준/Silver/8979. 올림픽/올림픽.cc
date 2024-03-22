@@ -4,7 +4,7 @@
 using namespace std;
 
 int n,k,c;
-vector<pair<int,int>>v;
+vector<vector<int>>v;
 
 int main()
 {
@@ -13,25 +13,30 @@ int main()
     
     for(int i = 0; i< n; i++){
         int g,s,d,val;
+        vector<int>tmp;
         cin >> c >> g >> s >> d;
-        val = 100 * g + 10 * s + d;
-        v.push_back({val,c});
+        tmp.push_back(g);
+        tmp.push_back(s);
+        tmp.push_back(d);
+        tmp.push_back(c);
+        v.push_back(tmp);
     }
     
     sort(v.begin(), v.end());
     
-    if(v[v.size()-1].second == k){
+    if(v[v.size()-1][3] == k){
         cout << 1;
         return 0;
     }
     
     int ans = 1;
-    
     for(int i = v.size() - 2; i >= 0; i-- ){
-        if(v[i+1].first != v[i].first) 
-            ans = v.size() - i;
+        for(int s = 0; s < 3; s++){
+            if(v[i+1][s] != v[i][s])
+                ans = v.size() - i;
+        }
         
-        if(v[i].second == k) {
+        if(v[i][3] == k) {
             cout << ans;
             return 0;
         }
