@@ -20,9 +20,17 @@ int main()
     
     sort(v.begin(), v.end());
     
+    if(v[v.size()-1].second == k){
+        cout << 1;
+        return 0;
+    }
+    
     int ans = 1;
+    
     for(int i = v.size() - 2; i >= 0; i-- ){
-        if(v[i+1].first != v[i].first) ans++;
+        if(v[i+1].first != v[i].first) 
+            ans = v.size() - i;
+        
         if(v[i].second == k) {
             cout << ans;
             return 0;
