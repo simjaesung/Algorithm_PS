@@ -1,30 +1,32 @@
 #include<iostream>
 #include<vector>
 using namespace std;
-vector<int>g[100005];
-int parent[100005];
+vector<int> v[100005];
+int ans[100005];
+int n,a,b;
 
-void dfs(int x)
-{
-	for (int i = 0; i < g[x].size(); i++) {
-		if (parent[g[x][i]] == 0) {
-			parent[g[x][i]] = x;
-			dfs(g[x][i]);
-		}
-	}
+void dfs(int x){
+    for(auto k : v[x]){
+        if(!ans[k]){
+            ans[k] = x;
+            dfs(k);   
+        }
+    }
 }
-
 
 int main()
 {
-	int n; cin >> n;
-	for (int i = 0; i < n - 1; i++) {
-		int a, b; cin >> a >> b;
-		g[a].push_back(b); g[b].push_back(a);
-	}
-
-	dfs(1);
-	for (int i = 2; i <= n; i++) cout << parent[i] << '\n';
-
-	return 0;
+    cin >> n;
+    for(int i = 0; i<n; i++){
+        cin >> a >> b;
+        v[a].push_back(b);
+        v[b].push_back(a);
+    }
+    dfs(1);
+    
+    for(int i = 2; i<=n; i++){
+        cout << ans[i] << '\n';
+    }
+    
+    return 0;
 }
