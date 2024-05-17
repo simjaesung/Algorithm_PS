@@ -11,13 +11,8 @@ int dy[4] = {0,0,1,-1};
 char arr[22][22];
 int visit[22][22];
 
-void go(int x, int y){
-    int tmp = 0;
-    for(int i = 0; i<30; i++){
-        if(check[i]) tmp++;
-    }
-    ans = max(ans, tmp);
-    
+void go(int x, int y, int cnt){
+    ans = max(ans, cnt);
     for(int i = 0; i<4; i++){
         int nx = x + dx[i];
         int ny = y + dy[i];
@@ -25,7 +20,7 @@ void go(int x, int y){
         if(!inrange(nx,ny) || check[nxt] || visit[nx][ny]) continue;
         check[nxt] = 1;
         visit[nx][ny] = 1;
-        go(nx,ny);
+        go(nx,ny,cnt + 1);
         check[nxt] = 0;
         visit[nx][ny] = 0;
     }
@@ -41,7 +36,7 @@ int main()
     }
     visit[1][1] = 1;
     check[arr[1][1]-'A'] = 1;
-    go(1,1);
+    go(1,1,1);
     cout << ans;
     return 0;
 }
