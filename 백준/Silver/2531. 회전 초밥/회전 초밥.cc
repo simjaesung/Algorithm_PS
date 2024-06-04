@@ -12,13 +12,17 @@ int main()
     for(int i = 0; i<n; i++) cin >> arr[i];
     for(int i = n; i<2*n; i++) arr[i] = arr[i-n];
     
-    for(int i = 0; i<=n; i++){
-        fill(cho, cho + d + 1, 0);
+    int s = 0; int e = k-1;
+    for(int i = s; i<=e; i++) cho[arr[i]]++;
+    cho[c]++;
+    
+    while(s < n){
         int tmp = 0;
-        cho[c] = 1;
-        for(int j = i; j<i+k;j++) cho[arr[j]] = 1;
-        for(int k = 1; k<=d; k++) if(cho[k]) tmp++;
-        ans = max(tmp,ans);
+        for(int i = 1; i<=d; i++) if(cho[i]) tmp++;
+        ans = max(ans,tmp);
+        cho[arr[s]]--;
+        s++; e++;
+        cho[arr[e]]++;
     }
     cout << ans;
     return 0;
