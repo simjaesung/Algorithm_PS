@@ -14,8 +14,7 @@ int main()
     sort(arr,arr+n);
     int s = 0; int e = 0;
     while(s < n && e < n){
-        if(s == e) e++;
-        else if(arr[e] - arr[s] >= m){
+        if(arr[e] - arr[s] >= m){
             ans = min(arr[e]-arr[s],ans);
             s++;
         }
