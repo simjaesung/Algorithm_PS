@@ -1,2 +1,2 @@
-# Algorithm_PS by c++ 
-매일 하려구요
+# Algorithm_PS
+매일 해야하는 알고리즘PS
