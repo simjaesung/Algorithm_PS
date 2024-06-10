@@ -1,13 +1,10 @@
 #include<iostream>
-#include<algorithm>
 using namespace std;
 int arr[105][3],s[105],b[105];
 int n,ans,val;
 int main()
 {
     cin >> n;
-    fill(s,s+105,-1);
-    fill(b,b+105,-1);
     for(int i = 0; i<n; i++){
         cin >> val;
         arr[i][0] = val / 100;
