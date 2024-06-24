@@ -12,7 +12,6 @@ let row = 3, col = 3; //초기 세로 가로
 
 function R(){
 	let tmpCol = 0; //col 갱신
-	//console.log("R");
 	for(let i = 0; i<row; i++){
 		let cntArr = []; //개수 세는
 		let tmpArr = []; //복사할 값 넣는
@@ -33,15 +32,12 @@ function R(){
 		}
 		
 		cntArr.sort((a,b)=> a[1] - b[1] || a[0] - b[0]);
-		//개수를 기준으로 정렬, 같으면 수가 커지는 순
-		//console.log(cntArr);
 		
 		for(let l = 0; l<cntArr.length; l++) {
 			tmpArr.push(cntArr[l][0]);
 			tmpArr.push(cntArr[l][1]);
 		}
 		
-		//console.log(tmpArr);
 		let len = tmpArr.length;
 		if(len > 100) len = 100; 
 		tmpCol = Math.max(len,tmpCol);
@@ -51,11 +47,10 @@ function R(){
 }
 
 function C(){
-	//console.log("C");
 	let tmpRow = 0;
 	for(let i = 0; i<col; i++){
 		let cntArr = [];
-		let tmpArr = []; //복사할 값 넣는
+		let tmpArr = []; //복사할 값 넣는 배열
 		for(let j = 0; j<row; j++){
 			let val = arr[j][i];
 			
@@ -72,14 +67,12 @@ function C(){
 		}
 		
 		cntArr.sort((a,b)=> a[1] - b[1] || a[0] - b[0]);
-		//console.log(cntArr);
 		
 		for(let l = 0; l<cntArr.length; l++) {
 			tmpArr.push(cntArr[l][0]);
 			tmpArr.push(cntArr[l][1]);
 		}
 		
-		//console.log(tmpArr);
 		let len = tmpArr.length;
 		if(len > 100) len = 100; 
 		
@@ -96,23 +89,14 @@ function CopyArr(){
 	}
 }
 
-function Print(){
-	console.log("####");
-	for(let i = 0; i<row; i++){
-		let str = "";
-		for(let j= 0; j<col; j++) str+=arr[i][j]+' ';
-		console.log(str);
-	}
-	console.log("####")
-}
-
 function solution(){
 	for(let i = 0; i<=100; i++){
 		
+		//init
 		for(let s = 0; s<100; s++){
 			for(let u = 0; u<100; u++) Tarr[s][u] = 0;
 		}
-		//console.log(row, col);
+		
 		if(arr[r-1][c-1] == k){
 			console.log(i);
 			return;
@@ -122,8 +106,6 @@ function solution(){
 		else C();
 		
 		CopyArr();
-		//console.log(row, col);
-		//Print();
 	}
 	console.log(-1);
 }
