@@ -10,10 +10,10 @@ function solution(){
 		ans++;
 		//1.벨트가 각 칸 위에 있는 로봇과 함께 한 칸 회전한다.
 		let tmpBelt = belt.pop();
-		belt = [tmpBelt,...belt];
+		belt.unshift(tmpBelt);
 		
 		robot.pop();
-		robot = [0,...robot];
+		robot.unshift(0);
 		if(robot[n-1] == 1) robot[n-1] = 0;
 		
 		//2.가장 먼저 벨트에 올라간 로봇부터, 벨트가 회전하는 방향으로 한 칸 이동할 수 있다면 이동한다. 
