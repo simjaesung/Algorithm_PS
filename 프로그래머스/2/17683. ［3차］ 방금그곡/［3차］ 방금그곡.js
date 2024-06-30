@@ -8,7 +8,6 @@ function rmPlat(s){
     return s;
 }
 
-
 function k(info){
     info = info.split(',');
     let tmp = [];
@@ -24,7 +23,7 @@ function k(info){
     let a = Math.floor(time / len);
     let b = time % len;
     
-    for(let i = 0; i<a; i++) sound += info[3];
+    sound += info[3].repeat(a);
     for(let i = 0; i<b; i++) sound += info[3][i];
     
     tmp.push(time, info[2], sound);
@@ -38,7 +37,6 @@ function compare(a,b){
 
 function solution(m, musicinfos) {
     m = rmPlat(m);
-    
     var answer = '(None)';
     
     let music = [];
