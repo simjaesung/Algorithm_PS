@@ -1,8 +1,13 @@
+function isNum(s){
+    let number = '0123456789';
+    return number.includes(s);
+}
+
 function select(file){
     let fileSelect = [];
     
     for(let i = 0; i<file.length; i++){
-        if(!isNaN(file[i]) && file[i] !== ' '){
+        if(isNum(file[i])){
             fileSelect.push(file.slice(0,i));
             file = file.slice(i);
             break;
@@ -10,7 +15,7 @@ function select(file){
     }
     
     for(let i = 0; i<file.length; i++){
-        if(isNaN(file[i])){
+        if(!isNum(file[i])){
             fileSelect.push(file.slice(0,i));
             file = file.slice(i);
             break;
@@ -29,7 +34,9 @@ function compare(a, b) {
     else if(+a[1] !== +b[1]){
         return (+a[1]) - (+b[1]);
     }
-    
+    else {
+        return map.get(a.join('')) - map.get(b.join(''));
+    }
 }
 
 
@@ -41,13 +48,11 @@ function solution(files) {
         map.set(e,i);
     })
     
-    console.log(tmp);
     tmp.sort(compare);
     
     tmp.forEach((e,i)=>{
         answer.push(e.join(''));
     })
-    
     return answer;
     
 }
