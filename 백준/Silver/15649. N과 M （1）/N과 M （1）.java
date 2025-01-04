@@ -8,10 +8,11 @@ class Main {
 	
 	public static void go(int cnt){
 		if(cnt == m){
+			StringBuilder sb = new StringBuilder();
 			for(int i = 0; i < m; i++){
-				System.out.print((arr[i] + 1) + " ");
+				sb.append((arr[i] + 1) + " ");
 			}
-			System.out.println();
+			System.out.println(sb.toString());
 			return;
 		}
 		
