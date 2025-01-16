@@ -12,7 +12,7 @@ class Main {
 		for(int i = 0; i < n; i++){
 			arr[i] = Long.parseLong(st.nextToken());
 		}
-		Arrays.fill(dp, 0L);
+		Arrays.fill(dp, 1L);
 		Long dpMax = 0L;
 		
 		for(int i = 0; i < n; i++){
@@ -21,7 +21,6 @@ class Main {
 					dp[i] = Math.max(dp[i],dp[j] + 1);
 				}
 			}
-			if(dp[i] == 0) dp[i] = 1L;
 			dpMax = Math.max(dpMax,dp[i]);
 		}
 		
