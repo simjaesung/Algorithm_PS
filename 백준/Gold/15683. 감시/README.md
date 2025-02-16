@@ -1,10 +1,10 @@
-# [Gold IV] 감시 - 15683 
+# [Gold III] 감시 - 15683 
 
 [문제 링크](https://www.acmicpc.net/problem/15683) 
 
 ### 성능 요약
 
-메모리: 2024 KB, 시간: 20 ms
+메모리: 77680 KB, 시간: 408 ms
 
 ### 분류
 
@@ -12,7 +12,7 @@
 
 ### 제출 일자
 
-2024년 2월 4일 11:35:38
+2025년 2월 16일 17:51:09
 
 ### 문제 설명
 
@@ -23,9 +23,9 @@
 		<tr>
 			<td style="width: 20%; text-align: center; vertical-align: middle;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15683/1.png" style="width: 113px; height: 70px;"></td>
 			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15683/2.png" style="width: 156px; height: 70px;"></td>
-			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="" style="width: 100px; height: 100px;"></td>
-			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="" style="width: 138px; height: 100px;"></td>
-			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="" style="width: 149px; height: 150px;"></td>
+			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15683/3.png" style="width: 100px; height: 100px;"></td>
+			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15683/4.png" style="width: 138px; height: 100px;"></td>
+			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15683/5.png" style="width: 149px; height: 150px;"></td>
 		</tr>
 		<tr>
 			<td style="width: 20%; text-align: center;">1번</td>
