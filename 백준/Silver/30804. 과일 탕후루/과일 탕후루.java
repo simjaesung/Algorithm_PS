@@ -15,16 +15,12 @@ class Main {
 		int end = 0;
 		int ans = 0;
 		
-		while(end < n){
-			while(start < n){
-				cnt[arr[start++]]++;
-				if(checkF(cnt) > 2){
-					cnt[arr[--start]]--;
-					break;
-				}
+		while(start < n){
+			cnt[arr[start++]]++;
+			while(checkF(cnt) > 2){
+				cnt[arr[end++]]--;
 			}
 			ans = Math.max(ans, start - end);
-			cnt[arr[end++]]--;
 		}
 		
 		System.out.println(ans);
