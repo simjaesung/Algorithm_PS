@@ -1,31 +1,23 @@
-#include<iostream>
+#include <iostream>
+#include <algorithm>
 using namespace std;
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	int a,b,c,d;
 
-int main()
-{
-	int arr[4];
-	int cnt,n = 3;
+	for(int i = 0; i < 3; i++){
+		int cnt = 0;
+		cin >> a >> b >> c >> d;
+		if(a) cnt++;
+		if(b) cnt++;
+		if(c) cnt++;
+		if(d) cnt++;
 
-	while (n--) {
-		cnt = 0;
-		for (int i = 0; i < 4; i++) cin >> arr[i];
-		for (int i = 0; i < 4; i++) if (arr[i] == 1) cnt++;
-
-		switch (cnt)
-		{
-		case 0:
-			cout << 'D'; break;
-		case 1:
-			cout << 'C'; break;
-		case 2:
-			cout << 'B'; break;
-		case 3:
-			cout << 'A'; break;
-		case 4:
-			cout << 'E'; break;
-		}
-		cout << '\n';
+		if(cnt == 4) cout << "E" << "\n";
+		else if(cnt == 3) cout << "A" << "\n";
+		else if(cnt == 2) cout << "B" << "\n";
+		else if(cnt == 1) cout << "C" << "\n";
+		else cout << "D" << "\n";
 	}
-	
-	return 0;
 }
