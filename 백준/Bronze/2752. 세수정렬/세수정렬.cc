@@ -1,21 +1,23 @@
-#include<iostream>
-#include<algorithm>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-int main()
-{
-	int arr[3];
-	for (int i = 0; i < 3; i++) cin >> arr[i];
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	
+	int a, b, c;
+	cin >> a >> b >> c;
 
-	for (int i = 2; i >= 0; i--) {
-		for (int j = i - 1; j >= 0; j--) {
-			if (arr[j] > arr[i]) {
-				swap(arr[j], arr[i]);
-			}
-		}
-	}
-
-	for (int i = 0; i < 3; i++) cout << arr[i] << ' ';
+	vector<int> v;
+	v.push_back(a);
+	v.push_back(b);
+	v.push_back(c);
+	sort(v.begin(), v.end());
+	
+	for(int k : v) 
+		cout << k << " ";
 	
 	return 0;
 }
