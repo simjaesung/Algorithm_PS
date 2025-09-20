@@ -1,18 +1,16 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
-int main()
-{
-	int a, b, c,mult;
-	int ans[10] = { 0 };
+int arr[10];
+int main() {
+	int a,b,c;
 	cin >> a >> b >> c;
-	mult = a * b * c;
+	int result = a * b * c;
 
-	while (mult > 0) {
-		ans[mult % 10]++;
-		mult /= 10;
+	while(result > 0){
+		arr[result % 10]++;
+		result /= 10;
 	}
 
-	for (auto& x : ans) cout << x << '\n';
-	
+	for(int k : arr) cout << k << "\n";
 	return 0;
 }
