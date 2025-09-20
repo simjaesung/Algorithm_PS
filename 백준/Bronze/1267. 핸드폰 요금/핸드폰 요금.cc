@@ -1,23 +1,26 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
 using namespace std;
-
-int main()
-{
-	int n; cin >> n;
-	int call[20];
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	
+	int n, time;
 	int y = 0, m = 0;
-	 
-	for (int i = 0; i < n; i++) {
-		cin >> call[i];
-		y += call[i] / 30 + 1;
-		m += call[i] / 60 + 1;
+	
+	cin >> n;
+	for(int i = 0; i < n; i++){
+		cin >> time;
+		if(time < 30) y += 10;
+		else y += (time / 30 + 1) * 10;
+
+		if(time < 60) m += 15;
+		else m += (time / 60 + 1) * 15;
 	}
 
-	y *= 10; m *= 15;
+	if(y == m) cout << "Y M " << y;
+	else if(y < m) cout << "Y " << y;
+	else cout << "M " << m;
 
-	if (y > m) cout << "M " << m;
-	else if (m > y) cout << "Y " << y;
-	else cout << "Y M "  << y;
-	
 	return 0;
 }
