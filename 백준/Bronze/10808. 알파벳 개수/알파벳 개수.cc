@@ -1,14 +1,13 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
+int arr[26];
 
-int main()
-{
-	int alpha[26] = { 0 };
+int main() {
+	string input;
+	cin >> input;
 
-	string s;
-	cin >> s;
-
-	for (auto& x : s) alpha[x - 'a']++;
-	for (auto& x : alpha) cout << x << ' ';
+	for(char c : input) arr[c - 'a']++;
+	for(int k : arr) cout << k << " ";
+	
 	return 0;
 }
