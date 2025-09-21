@@ -1,24 +1,27 @@
-#include<iostream>
-#include<algorithm>
+#include <iostream>
 using namespace std;
 
-int arr[100001];
-bool check[2000001];
-
-int main()
-{
-	ios::sync_with_stdio(0);
-	cin.tie(nullptr);
-	int n,sum,ans = 0; 
+int check[2000005];
+int ans;
+int main() {
+	int n,x;
 	cin >> n;
-	for (int i = 0; i < n; i++) cin >> arr[i];
-	cin >> sum;
+	int arr[n];
 
-	for (int i = 0; i < n; i++) {
-		if (sum - arr[i] > 0 && check[sum - arr[i]]) ans++;
-		check[arr[i]] = true;
+	for(int i = 0; i < n; i++) {
+		cin >> arr[i];
+		check[arr[i]]++;
 	}
+	
+	cin >> x;
 
-	cout << ans;
+	for(int i = 0; i < n; i++) {
+		if(x-arr[i] == arr[i]) continue;
+		if(x-arr[i] <= 0) continue;
+		if(check[x-arr[i]]) {
+			ans++;
+		}
+	}
+	cout << ans / 2;
 	return 0;
 }
