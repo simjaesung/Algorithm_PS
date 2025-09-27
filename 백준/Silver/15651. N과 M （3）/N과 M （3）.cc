@@ -1,27 +1,24 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
+int n,m,arr[10];
 
-int ans[10];
-int n, m;
-
-void go(int k)
-{
-	if (k == m) {
-		for (int i = 0; i < m; i++) cout << ans[i] << ' ';
-		cout << '\n';
+void func(int idx){
+	if(idx == m){
+		for(int i = 0; i < m; i++){
+			cout << arr[i] << " ";
+		}
+		cout << "\n";
 		return;
 	}
 
-	for (int i = 1; i <= n; i++) {
-		ans[k] = i;
-		go(k + 1);
+	for(int i = 1; i <= n; i++){
+		arr[idx] = i;
+		func(idx + 1);
 	}
 }
 
-int main()
-{
-	ios::sync_with_stdio(0); cin.tie(0);
+int main() {
 	cin >> n >> m;
-	go(0);
+	func(0);
 	return 0;
 }
