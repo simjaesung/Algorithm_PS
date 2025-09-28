@@ -1,27 +1,25 @@
-#include<iostream>
+#include <iostream>
+#include <algorithm>
 using namespace std;
+int n,s,arr[25],ans;
 
-int n, s,ans = 0;
-int arr[25], check[25];
-
-void go(int select, int index, int m, int sum)
-{
-	if (select == m) {
-		if (sum == s) ans++;
+void func(int sum, int idx){
+	if(idx == n){
+		if(sum == s) ans++;
 		return;
 	}
-	if (index > n -1 ) return;
-	go(select + 1, index + 1, m, sum + arr[index]);
-	go(select, index + 1, m, sum);
+	
+	func(sum + arr[idx], idx + 1);
+	func(sum, idx + 1);
 }
 
-
-int main()
-{
-	ios::sync_with_stdio(0); cin.tie(0);
+int main() {
 	cin >> n >> s;
-	for (int i = 0; i < n; i++) cin >> arr[i];
-	for (int k = 1; k <= n; k++) go(0, 0, k, 0);
+	for(int i = 0; i < n; i++) cin >> arr[i];
+	sort(arr, arr + n);
+	
+	func(0,0);
+	if(s == 0) ans--;
 	cout << ans;
 	return 0;
 }
