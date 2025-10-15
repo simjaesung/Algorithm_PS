@@ -1,33 +1,30 @@
-#include<iostream>
-#include<algorithm>
+#include <iostream>
+#include <algorithm>
 using namespace std;
+int n,m;
+int arr[10], memo[10];
 
-int n, m, a[10],num[10];
-
-void go(int index)
-{
-	if (index == m) {
-		for (int i = 0; i < m; i++) cout << a[i] << ' ';
-		cout << '\n';
+void go(int k){
+	if(k == m){
+		for(int i = 0; i < m; i++) cout << memo[i] << " ";
+		cout << "\n";
 		return;
 	}
+
 	int tmp = 0;
-	for (int i = 0; i < n; i++) {
-		if (tmp == num[i]) continue;
-		a[index] = num[i];
-		tmp = num[i];
-		go(index + 1);
+	for(int i = 0; i < n; i++){
+		if(arr[i] != tmp){
+			memo[k] = arr[i];
+			go(k + 1);
+			tmp = arr[i];
+		}
 	}
 }
 
-int main()
-{
-	ios::sync_with_stdio(0);
-	cin.tie(nullptr);
+int main() {
 	cin >> n >> m;
-	for (int i = 0; i < n; i++) cin >> num[i];
-	sort(num, num + n);
+	for(int i = 0; i < n; i++) cin >> arr[i];
+	sort(arr,arr + n);
 	go(0);
-	
 	return 0;
 }
