@@ -1,43 +1,50 @@
-#include<iostream>
-#include<algorithm>
+#include <iostream>
+#include <algorithm>
+#include <map>
 using namespace std;
 
-char pw[15];
-int check[15];
-char mom[5] = { 'a','e','i','o','u' };
+char arr[20], memo[20];
+unordered_map<char,int> moum;
+int l,c;
 
-void go(int index, int select, int n,int m) 
-{
-	if (select == n) {
-		int mo = 0, ja = 0;
-		for (int i = 0; i < n; i++) {
-			int c = 0;
-			for (int j = 0; j < 5; j++) 
-				if (pw[check[i]] == mom[j]) c = 1;
-			
-			if (c) mo++;
-			else ja++;
-		}
-		if (mo > 0 && ja > 1 ) {
-			for (int i = 0; i < n; i++) cout << pw[check[i]];
-			cout << '\n';
-		}
-		return;
-	}
-	if (index > m) return;
-
-	check[select] = index;
-	go(index + 1, select + 1, n, m);
-	check[select] = 0;
-	go(index + 1, select, n, m);
+void setHash(){
+	moum['a'] = 1;
+	moum['e'] = 1;
+	moum['i'] = 1;
+	moum['o'] = 1;
+	moum['u'] = 1;
 }
 
-int main()
-{
-	int l, c;
+bool check(){
+	int m = 0,j = 0;
+	for(int i = 0; i < l; i++){
+		char k = memo[i];
+		if(moum[k]) m++;
+		else j++;
+	}
+	return m >=1 && j >=2;
+}
+
+void go(int k, int idx){
+	if(k == l && check()){
+		for(int i = 0; i < l; i++) cout << memo[i];
+		cout << "\n";
+		return;
+	}
+
+	for(int i = idx; i < c; i++){
+		memo[k] = arr[i];
+		go(k + 1, i + 1);
+	}
+}
+
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
 	cin >> l >> c;
-	for (int i = 1; i <= c; i++) cin >> pw[i];
-	sort(pw, pw + c + 1);
-	go(1, 0, l, c);
+	for(int i = 0; i < c; i++) cin >> arr[i];
+	sort(arr, arr + c);
+	setHash();
+	go(0,0);
 	return 0;
 }
