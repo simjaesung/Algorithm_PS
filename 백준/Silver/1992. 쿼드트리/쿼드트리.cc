@@ -1,50 +1,46 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
+int arr[65][65], n;
 
-int pic[100][100];
-
-bool check(int x, int y, int n)
-{
-	int val = pic[x][y];
-	for (int i = x; i < x+n; i++) {
-		for (int j = y; j < y+n; j++) {
-			if (val != pic[i][j]) {
-				return false;
-			}
-		}
+void input(){
+	cin >> n;
+	string s;
+	for(int i = 0; i < n; i++){
+		cin >> s;
+		for(int j = 0; j < s.length(); j++) 
+			arr[i][j] = s[j] - '0';
 	}
-	return true;
 }
 
-void cut(int a, int b, int n)
-{
-	if (check(a, b, n)) {
-		cout << pic[a][b];
+int isSame(int a, int b, int len){
+	int val = arr[a][b];
+	for(int i = a; i < a + len; i++){
+		for(int j = b; j < b + len; j++){
+			if(arr[i][j] != val) return -1;
+		}
+	}
+	return val;
+}
+
+void go(int a, int b, int len){
+	int same = isSame(a,b,len);
+	if(same != -1){
+		cout << same;
 		return;
 	}
-	cout << '(';
-	int l = n / 2;
-	for (int i = 0; i < 2; i++) {
-		for (int j = 0; j < 2; j++) {
-			cut(a + l * i, b + l * j, l);
-		}
-	}
-	cout << ')';
+	int half = len / 2;
+	cout << "(";
+	go(a,b,half);
+	go(a,b+half,half);
+	go(a+half,b,half);
+	go(a+half,b+half,half);
+	cout << ")"; 
 }
 
-int main()
-{
-	ios::sync_with_stdio(0); cin.tie(0);
-	int n; cin >> n;
-
-	for (int i = 0; i < n; i++) {
-		string s; cin >> s;
-		for (int j = 0; j < s.length(); j++)
-			pic[i][j] = s[j] - '0';
-	}
-
-	
-	cut(0, 0, n);
-	
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	input();
+	go(0,0,n);
 	return 0;
 }
