@@ -1,34 +1,24 @@
 #include <iostream>
-using namespace std;
-long ans = -1;
-int n, to_n;
-int num_cnt = 1;
-void go(long val, int k, int last){
-	if(k == num_cnt){
-		if(ans != -1) return;
-		if(to_n++ == n) ans = val;
-		return;
-	}
+#include <vector>
+#include <algorithm>
 
+using namespace std;
+
+vector<long> res;
+int n;
+
+void dfs(long val, int last){
+	res.push_back(val);
 	for(int i = 0; i < last; i++){
-		go(val * 10 + i, k + 1, i);
+		dfs(val * 10 + i, i);
 	}
 }
 
 int main() {
 	cin >> n;
-	
-	if(n >= 1023){
-		cout << -1;
-		return 0;
-	}
-	
-	while(ans == -1){
-		for(int i = 0; i < 10; i++){
-			go(i,1,i);
-		}
-		num_cnt++;
-	}
-	cout << ans;
+	for(int i = 0; i < 10; i++) dfs(i,i);
+	sort(res.begin(), res.end());
+	if(res.size() <= n) cout << -1;
+	else cout << res[n];
 	return 0;
 }
