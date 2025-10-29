@@ -1,50 +1,38 @@
-#include<iostream>
-#include<limits.h>
+#include <iostream>
+#include <climits>
 using namespace std;
 
 int max_ans = INT_MIN;
 int min_ans = INT_MAX;
-int n;
-int u[4], num[15], s[15];
-//+-x/
+int n, arr[11], op[4];
 
-void go(int select)
-{
-	if (select == n - 1) {
-		int val = num[0];
-		for (int i = 1; i < n; i++) {
-			if (s[i - 1] == 0) val += num[i];
-			else if (s[i - 1] == 1) val -= num[i];
-			else if (s[i - 1] == 2) val *= num[i];
-			else if (s[i - 1] == 3) val /= num[i];
-		}
+void input(){
+	cin >> n;
+	for(int i = 0; i < n; i++) cin >> arr[i];
+	for(int i = 0; i < 4; i++) cin >> op[i];
+}
 
-		max_ans = max(max_ans, val);
-		min_ans = min(min_ans, val);
-
+void go(int k, int val){
+	if(k == n){
+		max_ans = max(val ,max_ans);
+		min_ans = min(val ,min_ans);
 		return;
 	}
 
-	for (int i = 0; i < 4; i++) {
-		if (u[i] == 0) continue;
-		u[i]--; s[select] = i;
-		go(select + 1);
-		u[i]++;
+	for(int i = 0; i < 4; i++){
+		if(!op[i]) continue;
+		op[i]--;
+		if(i == 0) go(k + 1, val + arr[k]);
+		if(i == 1) go(k + 1, val - arr[k]);
+		if(i == 2) go(k + 1, val * arr[k]);
+		if(i == 3) go(k + 1, val / arr[k]);
+		op[i]++;
 	}
 }
 
-
-
-int main()
-{
-	ios::sync_with_stdio(0); cin.tie(0);
-	cin >> n;
-	for (int i = 0; i < n; i++) cin >> num[i];
-	for (int i = 0; i < 4; i++) cin >> u[i];
-
-	go(0);
-	cout << max_ans << '\n';
-	cout << min_ans << '\n';
-	
+int main() {
+	input();
+	go(1,arr[0]);
+	cout << max_ans << "\n" << min_ans;
 	return 0;
 }
