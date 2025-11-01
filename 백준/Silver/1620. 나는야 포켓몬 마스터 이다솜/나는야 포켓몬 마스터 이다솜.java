@@ -5,24 +5,27 @@ class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		
 		int n = Integer.parseInt(st.nextToken());
 		int m = Integer.parseInt(st.nextToken());
-		Map<String,String>map = new HashMap<>();
-		
+
+		Map<String,Integer> m1 = new HashMap<>();
+		Map<Integer,String> m2 = new HashMap<>();
+
 		for(int i = 1; i <= n; i++){
-			StringTokenizer st2 = new StringTokenizer(br.readLine());
-			String s = st2.nextToken();
-			map.put(s,i+"");
-			map.put(i+"",s);
+			String s = br.readLine();
+			m1.put(s,i);
+			m2.put(i,s);
 		}
-		
-		StringBuffer sb = new StringBuffer();
+
+		StringBuilder sb = new StringBuilder();
 		
 		while(m-- > 0){
-			StringTokenizer st3 = new StringTokenizer(br.readLine());
-			sb.append(map.get(st3.nextToken()) + "\n");
+			String s = br.readLine();
+			if(m1.containsKey(s)){
+				sb.append(m1.get(s) + "\n");
+				continue;
+			}else sb.append(m2.get(Integer.parseInt(s)) + "\n");
 		}
-		System.out.println(sb.toString());
+		System.out.print(sb);
 	}
 }
