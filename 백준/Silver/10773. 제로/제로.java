@@ -4,23 +4,16 @@ import java.util.*;
 class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		Stack<Integer> s = new Stack<>();
-		int k = Integer.parseInt(br.readLine());
-		
-		while(k-- > 0){
+		int n = Integer.parseInt(br.readLine());
+		Deque<Integer> dq = new ArrayDeque<>();
+		while(n-- > 0){
 			int val = Integer.parseInt(br.readLine());
-			if(val == 0){
-				if(!s.empty()) s.pop();
-			}else{
-				s.push(val);
-			}
+			if(val == 0) dq.removeLast();
+			else dq.addLast(val);
 		}
-		
+		List<Integer> list = new ArrayList(dq);
 		int ans = 0;
-		while(!s.empty()){
-			ans += s.pop();
-		}
-		System.out.println(ans);
+		for(int i : list) ans += i;
+		System.out.print(ans);
 	}
 }
