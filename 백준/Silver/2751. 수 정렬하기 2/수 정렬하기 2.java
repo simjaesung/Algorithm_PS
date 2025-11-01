@@ -5,16 +5,15 @@ class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
-		int[] arr = new int[n];
-
+		Integer[] arr = new Integer[n];
 		for(int i = 0; i < n; i++){
-			arr[i] = Integer.parseInt(br.readLine());
+			Integer k = Integer.parseInt(br.readLine());
+			arr[i] = k;
 		}
-
+		//Arrays.sort(arr,(a,b) -> b - a);
 		Arrays.sort(arr);
-
-		for(int i = 0; i < n; i++){
-			System.out.println(arr[i]);
-		}
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < n; i++) sb.append(arr[i] + "\n");
+		System.out.println(sb);
 	}
 }
