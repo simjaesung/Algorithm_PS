@@ -1,47 +1,49 @@
+//BFS로도 풀어보기
 import java.util.*;
 
 class Solution {
-    static class Pair{
-        int x; int y;
-        public Pair(int x, int y){
-            this.x = x; this.y = y;
-        }
-    }
+    // static class Pair{
+    //     int x; int y;
+    //     public Pair(int x, int y){
+    //         this.x = x; this.y = y;
+    //     }
+    // }
     static int INF = Integer.MAX_VALUE;
     
     public int solution(int n, int[][] edge) {
-        ArrayList<Pair>[] adj = new ArrayList[n+1];
+        ArrayList<Integer>[] adj = new ArrayList[n+1];
         for(int i = 1; i <= n; i++) adj[i] = new ArrayList<>();
         for(int[] ed : edge){
-            adj[ed[0]].add(new Pair(ed[1],1));
-            adj[ed[1]].add(new Pair(ed[0],1));
+            adj[ed[0]].add(ed[1]);
+            adj[ed[1]].add(ed[0]);
         }
-        PriorityQueue<Pair> pq = new PriorityQueue<>((a,b) -> a.y - b.y);
+        
         int[] dist = new int[n+1];
-        Arrays.fill(dist,INF);
-        dist[1] = 0;
-        pq.offer(new Pair(1,0));
+        boolean[] visited = new boolean[n+1];
         
-        while(!pq.isEmpty()){
-            Pair cur = pq.poll();
-            if(dist[cur.x] != cur.y) continue;
-            for(Pair nxt : adj[cur.x]){
-                if(dist[nxt.x] <= dist[cur.x] + nxt.y) continue;
-                dist[nxt.x] = dist[cur.x] + nxt.y;
-                pq.offer(new Pair(nxt.x, dist[nxt.x]));
+        Deque<Integer> dq = new ArrayDeque<>();
+        dq.addLast(1);
+        visited[1] = true;
+        
+        while(!dq.isEmpty()){
+            int cur = dq.removeFirst();
+            for(int nxt : adj[cur]){
+                if(visited[nxt]) continue;
+                visited[nxt] = true;
+                dist[nxt] = dist[cur] + 1;
+                dq.addLast(nxt);
             }
         }
-    
         
-        int answer = 1; int max = dist[1];
+        int answer = 1;
+        int maxVal = dist[1];
         for(int i = 2; i<=n; i++){
-            if(dist[i] < max) continue;
-            if(dist[i] > max){
-                max = dist[i];
+            if(dist[i] > maxVal){
                 answer = 0;
+                maxVal = dist[i];
             }
-            answer++;
+            if(dist[i] == maxVal) answer++;
         }
-        return answer;
+       return answer;
     }
 }
