@@ -44,7 +44,9 @@ class Main {
 				if(arr[nx][ny] == 0) nxtCost++;
 				if(cost[nx][ny] <= nxtCost) continue;
 				cost[nx][ny] = nxtCost;
-				dq.addLast(new Pair(nx,ny));
+
+				if(arr[nx][ny] == 0) dq.addLast(new Pair(nx,ny));
+				else dq.addFirst(new Pair(nx,ny));
 			}
 		}
 
