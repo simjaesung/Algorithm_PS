@@ -13,16 +13,21 @@ class Main {
 			String a = st.nextToken();
 			String b = st.nextToken();
 
-			char[] aToCharArr = a.toCharArray();
-			char[] bToCharArr = b.toCharArray();
+			int[] arr = new int[26];
+
+			for(char c : a.toCharArray()) arr[c - 'a']++;
+			for(char c : b.toCharArray()) arr[c - 'a']--;
+
+			boolean check = true;
 			
-			Arrays.sort(aToCharArr);
-			Arrays.sort(bToCharArr);
+			for(int i : arr){
+				if(i != 0) {
+					check = false;
+					break;
+				}
+			}
 
-			a = new String(aToCharArr);
-			b = new String(bToCharArr);
-
-			if(a.equals(b)) sb.append("Possible\n");
+			if(check) sb.append("Possible\n");
 			else sb.append("Impossible\n");
 		}
 		
