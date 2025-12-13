@@ -2,11 +2,23 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-	public static int n;
-	public static int m;
-	public static int[] arr;
-	public static StringBuilder sb = new StringBuilder();
+	static int n,m;
+	static int[] arr;
+	static StringBuilder sb = new StringBuilder();
 	
+	static void go(int k){
+		if(k == m){
+			for(int val : arr) sb.append(val + " ");
+			sb.append("\n");
+			return;
+		}
+
+		for(int i = 1; i <= n; i++){
+			arr[k] = i;
+			go(k + 1);
+		}
+	}
+
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -14,21 +26,6 @@ class Main {
 		m = Integer.parseInt(st.nextToken());
 		arr = new int[m];
 		go(0);
-		System.out.print(sb.toString());
-	}
-	
-	public static void go(int cnt){
-		if(cnt == m){
-			for(int i = 0; i < m; i++){
-				sb.append(arr[i] + " ");
-			}
-			sb.append("\n");
-			return;
-		}
-		
-		for(int i = 0; i < n; i++){
-			arr[cnt] = i + 1;
-			go(cnt + 1);
-		}
+		System.out.println(sb);
 	}
 }
