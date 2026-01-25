@@ -2,25 +2,30 @@ import java.util.*;
 
 class Solution {
     public List<Integer> solution(int[] progresses, int[] speeds) {
-        List<Integer> answer = new ArrayList<>();
+        Deque<Integer> dq = new ArrayDeque<>();
         int n = progresses.length;
         
-        int day = 1; int cnt = 0;
         for(int i = 0; i < n; i++){
-            int remain = 100 - (progresses[i] + day * speeds[i]);
-            if(remain > 0) {
-                if(cnt > 0) {
-                    answer.add(cnt);
-                    cnt = 0;
-                }
-                if(remain % speeds[i] == 0){
-                    day += remain / speeds[i];
-                }else day += remain / speeds[i] + 1;
-                
-                cnt++;
-            } else cnt++;
+            int remain = 100 - progresses[i];
+            if(remain % speeds[i] == 0) dq.add(remain/speeds[i]);
+            else dq.add(remain/speeds[i] + 1);
         }
-        if(cnt > 0) answer.add(cnt);
+        
+        List<Integer> answer = new ArrayList<>();
+        
+        int front = dq.removeFirst();
+        int cnt = 1;
+        while(!dq.isEmpty()){
+            int tmp = dq.removeFirst();
+            if(front >= tmp) cnt++;
+            else {
+                answer.add(cnt);
+                front = tmp;
+                cnt = 1;
+            }
+        }
+        answer.add(cnt);
+        
         return answer;
     }
 }
