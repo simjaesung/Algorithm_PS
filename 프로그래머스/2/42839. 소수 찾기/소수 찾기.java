@@ -1,44 +1,43 @@
-import java.util.*;
-
 class Solution {
-    public static int n, ans;
-    public static boolean[] isPrime = new boolean[10000005];
-    public static char[] number;
+    public static int n = 10000005;
+    public static int numN;
+    public static int[] arr = new int[n];
+    public static char[] charArr;
+    public static boolean[] used = new boolean[n];
     public static boolean[] visited;
-    public static Map<Integer, Boolean> map = new HashMap<>();
+    public static int ans;
     
     public int solution(String numbers) {
-        n = numbers.length();
-        number = numbers.toCharArray();
-        visited = new boolean[n];
-        Arrays.fill(isPrime, true);
-        isPrime[0] = isPrime[1] = false;
-        for(int i = 2; i * i <= 9999999; i++){
-            if(isPrime[i]){
-                for(int j = i * i; j <= 9999999; j+=i){
-                    isPrime[j] = false;
-                }
-            }
-        }
-        findNum(0,"");
+        init();
+        numN = numbers.length();
+        charArr = numbers.toCharArray();
+        visited = new boolean[numN];
+        go("");
         return ans;
     }
     
-    public void findNum(int idx, String tmp){
-        if(idx > 0){
-            int toInt = Integer.parseInt(tmp);
-            if(!map.containsKey(toInt)){
-                if(isPrime[toInt]) ans++;
-                map.put(toInt, true);
+    public static void init(){
+        for(int i = 2; i < n; i++) arr[i] = i;
+        for(int i = 2; i < n; i++){
+            if(arr[i] == 0) continue;
+            for(long j = (long)i*i; j < n; j+=i){
+                arr[(int)j] = 0;
             }
         }
-        
-        if(idx == n) return;
-        
-        for(int i = 0; i < n; i++){
+    }
+    
+    public static void go(String tmp){
+        if(tmp.length() > 0){
+            int tmpToN = Integer.parseInt(tmp);
+            if(arr[tmpToN] != 0 && !used[tmpToN]) {
+                ans++;
+                used[tmpToN] = true;
+            }
+        }
+        for(int i = 0; i < numN; i++){
             if(visited[i]) continue;
             visited[i] = true;
-            findNum(idx + 1,tmp + number[i]);
+            go(tmp + charArr[i]);
             visited[i] = false;
         }
     }
