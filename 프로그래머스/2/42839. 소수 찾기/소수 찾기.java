@@ -1,44 +1,44 @@
 class Solution {
-    public static int n = 10000005;
-    public static int numN;
-    public static int[] arr = new int[n];
-    public static char[] charArr;
-    public static boolean[] used = new boolean[n];
-    public static boolean[] visited;
-    public static int ans;
+    static int ans, numLen;
+    static int n = 10000005;
+    static boolean[] isPrime = new boolean[n];
+    static char[] arr;
+    static boolean[] used;
+    static boolean[] ansUsed = new boolean[n];
     
     public int solution(String numbers) {
-        init();
-        numN = numbers.length();
-        charArr = numbers.toCharArray();
-        visited = new boolean[numN];
+        init(numbers);
         go("");
         return ans;
     }
     
-    public static void init(){
-        for(int i = 2; i < n; i++) arr[i] = i;
-        for(int i = 2; i < n; i++){
-            if(arr[i] == 0) continue;
-            for(long j = (long)i*i; j < n; j+=i){
-                arr[(int)j] = 0;
+    public void go(String tmp){
+        if(!tmp.equals("")){
+            int tmpNum = Integer.parseInt(tmp);
+            if(isPrime[tmpNum] && !ansUsed[tmpNum]) {
+                ans++;
+                ansUsed[tmpNum] = true;
             }
+        }
+        
+        for(int i = 0; i < numLen; i++){
+            if(used[i]) continue;
+            used[i] = true;
+            go(tmp + arr[i]);
+            used[i] = false;
         }
     }
     
-    public static void go(String tmp){
-        if(tmp.length() > 0){
-            int tmpToN = Integer.parseInt(tmp);
-            if(arr[tmpToN] != 0 && !used[tmpToN]) {
-                ans++;
-                used[tmpToN] = true;
-            }
+    public void init(String numbers){
+        //소수 설정
+        for(int i = 2; i < n; i++) isPrime[i] = true;
+        for(int i = 2; i * i < n; i++){
+            if(!isPrime[i]) continue;
+            for(int j = i * i; j < n; j += i) isPrime[j] = false;
         }
-        for(int i = 0; i < numN; i++){
-            if(visited[i]) continue;
-            visited[i] = true;
-            go(tmp + charArr[i]);
-            visited[i] = false;
-        }
+        
+        arr = numbers.toCharArray();
+        numLen = numbers.length();
+        used = new boolean[numLen];
     }
 }
