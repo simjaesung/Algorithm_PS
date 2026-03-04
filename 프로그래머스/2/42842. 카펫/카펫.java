@@ -2,7 +2,7 @@ class Solution {
     public int[] solution(int brown, int yellow) {
         int[] answer = new int[2];
         
-        for(int col = 1; col <= yellow; col++){
+        for(int col = 1; col * col <= yellow; col++){
             if(yellow % col != 0) continue;
             int row = yellow / col;
             int around = (col + row) * 2;
