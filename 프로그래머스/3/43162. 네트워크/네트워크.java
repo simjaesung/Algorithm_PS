@@ -1,32 +1,35 @@
 import java.util.*;
 
 class Solution {
+    static List<Integer> adj[];
+    static boolean[] visited;
+    static int answer;
     public int solution(int n, int[][] computers) {
-        int ans = 0;
-        boolean[] visited = new boolean[n];
-        
+        init(n, computers);
         for(int i = 0; i < n; i++){
             if(visited[i]) continue;
-            
-            ans++;
-            visited[i] = true;
-            
-            Deque<Integer> dq = new ArrayDeque<>();
-            dq.addLast(i);
-            
-            while(!dq.isEmpty()){
-                int cur = dq.removeFirst();
-                for(int nxt = 0; nxt < n; nxt++){
-                    if(nxt == cur || computers[cur][nxt] == 0) continue;
-                    if(visited[nxt]) continue;
-                    visited[nxt] = true;
-                    dq.addLast(nxt);
-                }
-            }
+            answer++;
+            dfs(i);
         }
-        
-        return ans;
-        
+        return answer;
     }
     
+    public void dfs(int k){
+        visited[k] = true;
+        for(int nxt : adj[k]){
+            if(!visited[nxt]) dfs(nxt);
+        }
+    }
+    
+    public void init(int n, int[][] computers){
+        adj = new ArrayList[n];
+        visited = new boolean[n];
+        for(int i = 0; i < n; i++) adj[i] = new ArrayList<>();
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(i == j) continue;
+                if(computers[i][j] == 1) adj[i].add(j);
+            }
+        }
+    }
 }
