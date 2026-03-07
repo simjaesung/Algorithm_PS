@@ -2,20 +2,22 @@ import java.util.*;
 
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-        Set<Integer> reserves = new HashSet<>();
-        Set<Integer> losts = new HashSet<>();
-        for(int r : reserve) reserves.add(r);
+        int[] arr = new int[n+2];
+        Arrays.fill(arr,1);
+        for(int l : lost) arr[l]--;
+        for(int r : reserve) arr[r]++;
         
-        for(int l : lost){
-            if(reserves.contains(l)) reserves.remove(l);
-            else losts.add(l);
+        for(int i = 1; i <= n; i++){
+            if(arr[i] < 2) continue;
+            if(arr[i-1] == 0) {
+                arr[i-1]++; arr[i]--;
+            }else if(arr[i+1] == 0){
+                arr[i+1]++; arr[i]--;
+            }
         }
         
-        for(int r : reserves){
-            if(losts.contains(r-1)) losts.remove(r-1);
-            else if(losts.contains(r+1)) losts.remove(r+1);
-        }
-        
-        return n-losts.size();
+        int answer = 0;
+        for(int i = 1; i <= n; i++) if(arr[i] > 0) answer++;
+        return answer;
     }
 }
