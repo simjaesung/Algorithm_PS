@@ -2,10 +2,10 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-	static class Tuple{
-		int x; int y; int cnt;
-		public Tuple(int x, int y, int cnt){
-			this.x = x; this.y = y; this.cnt = cnt;
+	static class Pair{
+		int x; int y;
+		public Pair(int x, int y){
+			this.x = x; this.y = y;
 		}
 	}
 	
@@ -27,11 +27,12 @@ class Main {
 
 		cost[0][0] = 0; 
 
-		PriorityQueue<Tuple> pq = new PriorityQueue<>((a,b) -> a.cnt - b.cnt);
-		pq.offer(new Tuple(0,0,0));
+		Deque<Pair> dq = new ArrayDeque<>();
+		dq.addLast(new Pair(0,0));
 		
-		while(!pq.isEmpty()){
-			Tuple cur = pq.poll();
+		
+		while(!dq.isEmpty()){
+			Pair cur = dq.removeFirst();
 			if(cur.x == n-1 && cur.y == n-1) continue;
 			
 			for(int i = 0; i < 4; i++){
@@ -43,8 +44,7 @@ class Main {
 				if(arr[nx][ny] == 0) nxtCost++;
 				if(cost[nx][ny] <= nxtCost) continue;
 				cost[nx][ny] = nxtCost;
-
-				pq.offer(new Tuple(nx,ny,nxtCost));
+				dq.addLast(new Pair(nx,ny));
 			}
 		}
 
