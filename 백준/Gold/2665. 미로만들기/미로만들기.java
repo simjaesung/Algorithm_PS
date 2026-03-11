@@ -3,10 +3,10 @@ import java.util.*;
 
 class Main {
 	static class Pair{
-		int x; int y;
-		public Pair(int x, int y){
-			this.x = x; this.y = y;
-		}
+		int x; int y; int z;
+		public Pair(int x, int y, int z){
+			this.x = x; this.y = y; this.z = z;
+		} 
 	}
 	static int n;
 	static int[][] arr, visited;
@@ -26,22 +26,24 @@ class Main {
 			Arrays.fill(visited[i], n * n);
 		}
 
-		Deque<Pair>dq = new ArrayDeque<>();
+		PriorityQueue<Pair> pq = new PriorityQueue<>((a,b) -> a.z - b.z);
 		visited[0][0] = 0;
-		dq.addLast(new Pair(0,0));
-		while(!dq.isEmpty()){
-			Pair cur = dq.removeFirst();
+		pq.offer(new Pair(0,0,0));
+		
+		while(!pq.isEmpty()){
+			Pair cur = pq.poll();
+			if(cur.x == n-1 && cur.y == n-1) break;
 
 			for(int i = 0; i < 4; i++){
 				int nx = cur.x + dx[i];
 				int ny = cur.y + dy[i];
 				if(nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
-				int nxtBroken = visited[cur.x][cur.y];
+				
+				int nxtBroken = cur.z;
 				if(arr[nx][ny] == 0) nxtBroken++;
 				if(visited[nx][ny] <= nxtBroken) continue;
 				visited[nx][ny] = nxtBroken;
-				if(arr[nx][ny] == 1) dq.addLast(new Pair(nx,ny));
-				else dq.addLast(new Pair(nx,ny));
+				pq.offer(new Pair(nx,ny,nxtBroken));
 			}
 		}
 
