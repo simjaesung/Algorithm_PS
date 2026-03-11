@@ -40,7 +40,8 @@ class Main {
 				if(arr[nx][ny] == 0) nxtBroken++;
 				if(visited[nx][ny] <= nxtBroken) continue;
 				visited[nx][ny] = nxtBroken;
-				dq.addLast(new Pair(nx,ny));
+				if(arr[nx][ny] == 1) dq.addLast(new Pair(nx,ny));
+				else dq.addLast(new Pair(nx,ny));
 			}
 		}
 
