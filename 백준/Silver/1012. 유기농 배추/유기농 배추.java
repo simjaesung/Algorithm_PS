@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+
 class Main {
 	static class Pair{
 		int x; int y;
@@ -11,27 +12,22 @@ class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int t = Integer.parseInt(br.readLine());
-
-		int[] dx = {-1,1,0,0};
-		int[] dy = {0,0,-1,1};
-		
 		int[][] arr = new int[55][55];
-		int[][] visited = new int[55][55];
-		int m; //가로
-		int n; //세로
-		int k; //배추 위치 개수
-		StringBuilder sb = new StringBuilder();
+		boolean[][] visited = new boolean[55][55];
+		int[] dx = {-1,1,0,0};
+		int[] dy = {0,0,1,-1};
+		StringTokenizer st;
+		
 		while(t-- > 0){
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			m = Integer.parseInt(st.nextToken());
-			n = Integer.parseInt(st.nextToken());
-			k = Integer.parseInt(st.nextToken());
-
-			for(int i = 0; i < m; i++){
+			st = new StringTokenizer(br.readLine());
+			for(int i = 0; i < 55; i++){
 				Arrays.fill(arr[i],0);
-				Arrays.fill(visited[i],0);
+				Arrays.fill(visited[i],false);
 			}
-
+			int n = Integer.parseInt(st.nextToken());
+			int m = Integer.parseInt(st.nextToken());
+			int k = Integer.parseInt(st.nextToken());
+			
 			while(k-- > 0){
 				st = new StringTokenizer(br.readLine());
 				int x = Integer.parseInt(st.nextToken());
@@ -40,30 +36,28 @@ class Main {
 			}
 
 			int ans = 0;
-			for(int i = 0; i < m; i++){
-				for(int j = 0; j < n; j++){
-					if(arr[i][j] == 1 && visited[i][j] == 0){
+			for(int i = 0; i < n; i++){
+				for(int j = 0; j < m; j++){
+					if(arr[i][j] == 1 && !visited[i][j]){
 						ans++;
-						visited[i][j] = 1;
 						Deque<Pair> dq = new ArrayDeque<>();
 						dq.addLast(new Pair(i,j));
-
+						visited[i][j] = true;
 						while(!dq.isEmpty()){
-							Pair cur = dq.peekFirst(); dq.removeFirst();
-							for(int s = 0; s < 4; s++){
-								int nx = cur.x + dx[s];
-								int ny = cur.y + dy[s];
-								if(nx < 0 || nx >= m || ny < 0 || ny >= n) continue;
-								if(arr[nx][ny] != 1 || visited[nx][ny] == 1) continue;
-								visited[nx][ny] = 1;
+							Pair cur = dq.removeFirst();
+							for(int l = 0; l < 4; l++){
+								int nx = cur.x + dx[l];
+								int ny = cur.y + dy[l];
+								if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+								if(arr[nx][ny] != 1 || visited[nx][ny]) continue;
+								visited[nx][ny] = true;
 								dq.addLast(new Pair(nx,ny));
 							}
 						}
 					}
 				}
 			}
-			sb.append(ans + "\n");
+			System.out.println(ans);
 		}
-		System.out.println(sb);
 	}
 }
