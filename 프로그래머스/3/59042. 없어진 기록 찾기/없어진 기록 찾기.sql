@@ -1,10 +1,8 @@
 -- 코드를 입력하세요
-SELECT 
+SELECT
     O.ANIMAL_ID,
     O.NAME
-from ANIMAL_INS I
-right join ANIMAL_OUTS O
-on I.ANIMAL_ID = O.ANIMAL_ID
+from ANIMAL_OUTS O
+left join ANIMAL_INS I
+on O.ANIMAL_ID = I.ANIMAL_ID
 where I.ANIMAL_ID is null;
-
-
