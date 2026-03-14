@@ -12,10 +12,12 @@ class Main {
 
 		int m = Integer.parseInt(br.readLine());
 		st = new StringTokenizer(br.readLine());
+		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < m; i++) {
 			int target = Arrays.binarySearch(arr, Integer.parseInt(st.nextToken()));
-			if(target >= 0) System.out.println(1);
-			else  System.out.println(0);
+			if(target >= 0) sb.append("1\n");
+			else  sb.append("0\n");
 		}
+		System.out.println(sb);
 	}
 }
