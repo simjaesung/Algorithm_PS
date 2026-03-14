@@ -4,24 +4,18 @@ import java.util.*;
 class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		Map<Integer,Integer>m = new HashMap<>();
 		int n = Integer.parseInt(br.readLine());
-		StringTokenizer st1 = new StringTokenizer(br.readLine());
-		while(n-- > 0){
-			int k = Integer.parseInt(st1.nextToken());
-			m.put(k,1);
+		int[] arr = new int[n];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for(int i = 0; i < n; i++) arr[i] = Integer.parseInt(st.nextToken());
+		Arrays.sort(arr);
+
+		int m = Integer.parseInt(br.readLine());
+		st = new StringTokenizer(br.readLine());
+		for(int i = 0; i < m; i++) {
+			int target = Arrays.binarySearch(arr, Integer.parseInt(st.nextToken()));
+			if(target >= 0) System.out.println(1);
+			else  System.out.println(0);
 		}
-		
-		StringBuilder sb = new StringBuilder();
-		
-		int l = Integer.parseInt(br.readLine());
-		StringTokenizer st2 = new StringTokenizer(br.readLine());
-		while(l-- >0){
-			int k = Integer.parseInt(st2.nextToken());
-			if(m.containsKey(k)) sb.append("1\n");
-			else sb.append("0\n");
-		}
-		
-		System.out.println(sb.toString());
 	}
 }
