@@ -6,7 +6,6 @@ class Main {
 	static int[] dx = {-1,1,0,0};
 	static int[] dy = {0,0,-1,1};
 	static int R,C,ans;
-	static boolean[] visited = new boolean[26];
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,22 +18,22 @@ class Main {
 			String input = br.readLine();
 			for(int j = 0; j < C; j++) arr[i][j] = input.charAt(j);
 		}
-		visited[arr[0][0] - 'A'] = true;
-		dfs(0,0,1);
+
+		int start = arr[0][0] - 'A';
+		dfs(0,0,(1 << start));
 		System.out.println(ans);
 	}
 
-	public static void dfs(int x, int y, int cnt){
-		ans = Math.max(ans, cnt);
+	public static void dfs(int x, int y, int mask){
+		ans = Math.max(ans, Integer.bitCount(mask));
 
 		for(int i = 0; i < 4; i++){
 			int nx = x + dx[i];
 			int ny = y + dy[i];
 			if(nx < 0 || nx >= R || ny < 0 || ny >= C) continue;
-			if(visited[arr[nx][ny] - 'A']) continue;
-			visited[arr[nx][ny] - 'A'] = true;
-			dfs(nx,ny,cnt+1);
-			visited[arr[nx][ny] - 'A'] = false;
+			int nxt = arr[nx][ny] - 'A';
+			if((mask & 1 << nxt) != 0) continue;
+			dfs(nx,ny, mask | (1 << nxt));
 		}
 	}
 }
