@@ -1,0 +1,12 @@
+-- 코드를 입력하세요
+SELECT
+    A.AUTHOR_ID,
+    A.AUTHOR_NAME,
+    B.CATEGORY,
+    sum(B.PRICE * S.SALES) TOTAL_SALES
+from BOOK B
+join AUTHOR A on B.AUTHOR_ID = A.AUTHOR_ID
+join BOOK_SALES S on B.BOOK_ID = S.BOOK_ID
+where DATE_FORMAT(S.SALES_DATE,'%Y-%m') = '2022-01'
+group by B.AUTHOR_ID, B.CATEGORY
+order by B.AUTHOR_ID, B.CATEGORY desc;
