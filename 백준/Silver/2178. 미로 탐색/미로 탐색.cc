@@ -6,7 +6,7 @@ using namespace std;
 
 int n,m,ans = INT_MAX;
 int arr[105][105];
-bool visited[105][105];
+int dist[105][105];
 int dx[] = {-1,1,0,0};
 int dy[] = {0,0,-1,1};
 bool inRange(int x, int y){
@@ -20,29 +20,29 @@ void input(){
 		cin >> s;
 		for(int j = 0; j < m; j++) arr[i][j] = s[j] - '0';
 	}
+
+	for(int i = 0; i < n; i++){
+		fill(dist[i], dist[i] + m, -1);
+	}
 }
 
 int main() {
 	ios::sync_with_stdio(0); cin.tie(0);
 	input();
-	queue<tuple<int,int,int>> q;
-	q.push({0,0,1});
-	visited[0][0] = 1;
+	queue<pair<int,int>> q;
+	q.push({0,0});
+	dist[0][0] = 1;
 	while(!q.empty()){
-		auto[cx,cy,cnt] = q.front(); q.pop();
-		if(cx == n - 1 && cy == m - 1) {
-			ans = min(ans, cnt);
-			continue;
-		}
+		auto[cx,cy] = q.front(); q.pop();
 		for(int i = 0; i < 4; i++){
 			int nx = cx + dx[i];
 			int ny = cy + dy[i];
- 			if(!inRange(nx,ny) || visited[nx][ny] || !arr[nx][ny]) continue;
-			visited[nx][ny] = 1;
-			q.push({nx,ny,cnt+1});
+ 			if(!inRange(nx,ny) || dist[nx][ny] != -1 || !arr[nx][ny]) continue;
+			dist[nx][ny] = dist[cx][cy] + 1;
+			q.push({nx,ny});
 		}
 	}
 	
-	cout << ans;
+	cout << dist[n-1][m-1];
 	return 0;
 }
