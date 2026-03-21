@@ -41,7 +41,7 @@ class Main {
 					return;
 				}
 				
-				if(!stack.isEmpty()) stack.removeLast();
+				stack.removeLast();
 				if(sum == 0) {
 					if(arr[i] == ']') stack.addLast(new Pair(arr[i], 3));
 					else stack.addLast(new Pair(arr[i], 2));
