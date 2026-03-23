@@ -16,14 +16,15 @@ class Main {
 			arr[i][1] = v;
 		}
 
-		//dp[i][j] = i번째 물건을 넣으려고할때 무게가 j이상일때 최대 가치
-		int[][] dp = new int[n+1][k+1];
+		int[] dp = new int[k+1];
 		for(int i = 1; i <= n; i++){
-			for(int j = 0; j <= k; j++){
-				if(arr[i][0] <= j) dp[i][j] = Math.max(dp[i-1][j-arr[i][0]] + arr[i][1], dp[i-1][j]);
-				else dp[i][j] = dp[i-1][j];
+			int w = arr[i][0];
+			int v = arr[i][1];
+			
+			for(int j = k; j >= w; j--){
+				dp[j] = Math.max(dp[j], dp[j-w]+v);
 			}
 		}
-		System.out.println(dp[n][k]);
+		System.out.println(dp[k]);
 	}
 }
