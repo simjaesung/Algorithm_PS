@@ -2,13 +2,6 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-	static class Tuple{
-		int x; int y; int d;
-		public Tuple(int x, int y, int d){
-			this.x = x; this.y = y; this.d = d;
-		}
-	}
-	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -28,22 +21,20 @@ class Main {
 			st = new StringTokenizer(br.readLine());
 			for(int j = 0; j < m; j++) arr[i][j] = Integer.parseInt(st.nextToken());
 		}
-		//1:벽, 0:빈칸, 2:청소
-		Deque<Tuple> q = new ArrayDeque<>();
-		q.addLast(new Tuple(cx,cy,d));
+		
+		//1:벽, 0:빈칸, -1:청소
 		int ans = 0;
-		while(!q.isEmpty()){
-			Tuple cur = q.removeFirst();
-			if(arr[cur.x][cur.y] == 0){
+		while(true){
+			if(arr[cx][cy] == 0){
 				ans++; 
-				arr[cur.x][cur.y] = -1;
+				arr[cx][cy] = -1;
 			}
 
 			boolean isDirty = false;
 			
 			for(int i = 0; i < 4; i++){
-				int nx = cur.x + dx[i];
-				int ny = cur.y + dy[i];
+				int nx = cx + dx[i];
+				int ny = cy + dy[i];
 				if(arr[nx][ny] == 0) {
 					isDirty = true;
 					break;
@@ -53,17 +44,17 @@ class Main {
 			if(isDirty){
 				//청소되지 않은 빈 칸이 있는 경우
 				d = (d + 4 - 1) % 4;
-				int nx = cur.x + dx[d];
-				int ny = cur.y + dy[d];
-				if(arr[nx][ny] == 0) q.addLast(new Tuple(nx,ny,d));
-				else q.addLast(new Tuple(cur.x,cur.y,d));
+				int nx = cx + dx[d];
+				int ny = cy + dy[d];
+				if(arr[nx][ny] == 0) {
+					cx = nx; 
+					cy = ny;
+				}
 			}else{
 				//청소되지 않은 빈 칸이 없는 경우
 				int back = (d + 2) % 4;
-				int nx = cur.x + dx[back];
-				int ny = cur.y + dy[back];
-				if(arr[nx][ny] == 1) break;
-				q.addLast(new Tuple(nx,ny,d));
+				cx += dx[back]; cy += dy[back];
+				if(arr[cx][cy] == 1) break;
 			}
 		}
 		
