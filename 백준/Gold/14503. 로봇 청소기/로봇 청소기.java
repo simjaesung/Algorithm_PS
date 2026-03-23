@@ -44,7 +44,6 @@ class Main {
 			for(int i = 0; i < 4; i++){
 				int nx = cur.x + dx[i];
 				int ny = cur.y + dy[i];
-				if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
 				if(arr[nx][ny] == 0) {
 					isDirty = true;
 					break;
