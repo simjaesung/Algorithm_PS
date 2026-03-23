@@ -1,69 +1,61 @@
 import java.io.*;
-
 class Main {
-	public static int n,ans;
-	public static int[][] arr = new int[15][15];
-	public static boolean inRange(int x, int y){
-		return x >= 0 && x < n && y >= 0 && y < n;
-	}
-	
+	static int n, ans;
+	static int[][] arr;
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		n = Integer.parseInt(br.readLine());
-		
-		nQueen(0);
+		arr = new int[n][n];
+		go(0);
 		System.out.println(ans);
 	}
-	
-	
-	public static void nQueen(int l){
-		if(l == n){
+
+	static void go(int h){
+		if(h == n) {
 			ans++;
 			return;
 		}
-		
+
 		for(int i = 0; i < n; i++){
-			if(check(l,i)){
-				arr[l][i] = 1;
-				nQueen(l + 1);
-				arr[l][i] = 0;
-			}
+			if(!sameSero(h,i)) continue;
+			if(!sameCross(h,i)) continue;
+			arr[h][i] = 1;
+			go(h + 1);
+			arr[h][i] = 0;
 		}
 	}
-	
-	public static boolean check(int x, int y){
-		for(int i = 0; i < n; i++){
-			if(arr[i][y] == 1) return false;
+
+	static boolean sameSero(int h, int k){
+		for(int i = 0; i < h; i++){
+			if(arr[i][k] == 1) return false;
 		}
-		
-		int x1 = x + 1;
-		int y1 = y + 1;
-		while(inRange(x1,y1)){
-			if(arr[x1][y1] == 1) return false;
-			x1++; y1++;
+		return true;
+	}
+
+	static boolean sameCross(int i, int j){
+		int i1 = i; int j1 = j;
+		while(i1 < n && j1 < n){
+			if(arr[i1][j1] == 1) return false;
+			i1++; j1++;
 		}
-		
-		int x2 = x - 1;
-		int y2 = y - 1;
-		while(inRange(x2,y2)){
-			if(arr[x2][y2] == 1) return false;
-			x2--; y2--;
+
+		int i2 = i; int j2 = j;
+		while(i2 >= 0 && j2 >= 0){
+			if(arr[i2][j2] == 1) return false;
+			i2--; j2--;
 		}
-		
-		int x3 = x + 1;
-		int y3 = y - 1;
-		while(inRange(x3,y3)){
-			if(arr[x3][y3] == 1) return false;
-			x3++; y3--;
+
+		int i3 = i; int j3 = j;
+		while(i3 >=0 && j3 < n){
+			if(arr[i3][j3] == 1) return false;
+			i3--; j3++;
 		}
-		
-		int x4 = x - 1;
-		int y4 = y + 1;
-		while(inRange(x4,y4)){
-			if(arr[x4][y4] == 1) return false;
-			x4--; y4++;
+
+		int i4 = i; int j4 = j;
+		while(i4 < n && j4 >= 0){
+			if(arr[i4][j4] == 1) return false;
+			i4++; j4--;
 		}
-		
 		return true;
 	}
 }
