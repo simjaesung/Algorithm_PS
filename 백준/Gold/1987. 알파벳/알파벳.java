@@ -2,38 +2,40 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-	static char[][] arr;
+	static int R,C,ans;
+	static String[][] arr;
 	static int[] dx = {-1,1,0,0};
 	static int[] dy = {0,0,-1,1};
-	static int R,C,ans;
-	
+	static boolean[][] visited;
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		R = Integer.parseInt(st.nextToken());
 		C = Integer.parseInt(st.nextToken());
-
-		arr = new char[R][C];
+		arr = new String[R][C];
+		visited = new boolean[R][C];
+		
 		for(int i = 0; i < R; i++){
 			String input = br.readLine();
-			for(int j = 0; j < C; j++) arr[i][j] = input.charAt(j);
+			for(int j = 0; j < C; j++) arr[i][j] = input.charAt(j)+"";
 		}
-
-		int start = arr[0][0] - 'A';
-		dfs(0,0,(1 << start));
+		go(0,0,arr[0][0]);
+		visited[0][0] = true;
 		System.out.println(ans);
 	}
 
-	public static void dfs(int x, int y, int mask){
-		ans = Math.max(ans, Integer.bitCount(mask));
+	static void go(int cx, int cy, String tmp){
+		ans = Math.max(tmp.length(), ans);
 
 		for(int i = 0; i < 4; i++){
-			int nx = x + dx[i];
-			int ny = y + dy[i];
+			int nx = cx + dx[i];
+			int ny = cy + dy[i];
 			if(nx < 0 || nx >= R || ny < 0 || ny >= C) continue;
-			int nxt = arr[nx][ny] - 'A';
-			if((mask & 1 << nxt) != 0) continue;
-			dfs(nx,ny, mask | (1 << nxt));
+			if(tmp.contains(arr[nx][ny])) continue;
+			if(visited[nx][ny]) continue;
+			visited[nx][ny] = true;
+			go(nx,ny,tmp + arr[nx][ny]);
+			visited[nx][ny] = false;
 		}
 	}
 }
