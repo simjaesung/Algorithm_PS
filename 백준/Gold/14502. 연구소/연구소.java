@@ -18,6 +18,7 @@ class Main {
 	static int ans = 0;
 	static int[] dx = {-1,1,0,0};
 	static int[] dy = {0,0,-1,1};
+	static int[] wall = new int[3];
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -41,23 +42,25 @@ class Main {
 				}
 			}
 		}
+		select(0,0);
+		System.out.println(ans);
+	}
 
-		for(int i = 0; i < area.size(); i++){
-			for(int j = i + 1; j < area.size(); j++){
-				for(int k = j + 1; k < area.size(); k++){
-					init();
-					Pair p1 = area.get(i);
-					Pair p2 = area.get(j);
-					Pair p3 = area.get(k);
-					arr_copy[p1.x][p1.y] = 1;
-					arr_copy[p2.x][p2.y] = 1;
-					arr_copy[p3.x][p3.y] = 1;
-					ans = Math.max(ans, bfs());
-				}
+	public static void select(int idx, int k){
+		if(k == 3){
+			init();
+			for(int i = 0; i < 3; i++) {
+				Pair p = area.get(wall[i]);
+				arr_copy[p.x][p.y] = 1;
 			}
+			ans = Math.max(ans, bfs());
+			return;
 		}
 
-		System.out.println(ans);
+		for(int i = idx; i < area.size(); i++){
+			wall[k] = i;
+			select(i + 1, k + 1);
+		}
 	}
 
 	public static void init(){
