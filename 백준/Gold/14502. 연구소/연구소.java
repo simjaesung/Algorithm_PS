@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.*;
-
 class Main {
 	static class Pair{
 		int x; int y;
@@ -10,70 +9,53 @@ class Main {
 	}
 	
 	static int n,m;
-	static int[][] arr;
-	static int[][] arr_copy;
-	static int[][] visited;
-	static ArrayList<Pair> area;
-	static ArrayList<Pair> virus;
-	static int ans = 0;
+	static int[][] arr, arr_copy;
+	static ArrayList<Pair> emptys, virus;
 	static int[] dx = {-1,1,0,0};
 	static int[] dy = {0,0,-1,1};
-	static int[] wall = new int[3];
-	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
-
-		arr = new int[n][m]; //원본 연구소
-		arr_copy = new int[n][m]; // 카피본 연구소
-		visited = new int[n][m];
-		area = new ArrayList<>(); //연구소 빈곳
-		virus = new ArrayList<>(); //초기 바이러스 위치
-
+		arr = new int[n][m];
+		arr_copy = new int[n][m];
+		emptys = new ArrayList<>();
+		virus = new ArrayList<>();
+		int ans = 0;
+		
 		for(int i = 0; i < n; i++){
 			st = new StringTokenizer(br.readLine());
 			for(int j = 0; j < m; j++) {
-				arr[i][j] = Integer.parseInt(st.nextToken());
+				int tmp = Integer.parseInt(st.nextToken());
+				arr[i][j] = tmp;
+				arr_copy[i][j] = tmp;
+				if(arr[i][j] == 0) emptys.add(new Pair(i,j));
 				if(arr[i][j] == 2) virus.add(new Pair(i,j));
-				if(arr[i][j] == 0) {
-					area.add(new Pair(i,j));
+			}
+		}
+
+		int k = emptys.size();
+		for(int i = 0; i < k; i++){
+			for(int j = i + 1; j < k; j++){
+				for(int l = j + 1; l < k; l++){
+					Pair e1 = emptys.get(i);
+					Pair e2 = emptys.get(j);
+					Pair e3 = emptys.get(l);
+					arr[e1.x][e1.y] = 1;
+					arr[e2.x][e2.y] = 1;
+					arr[e3.x][e3.y] = 1;
+					ans = Math.max(ans, bfs());
+					init();
 				}
 			}
 		}
-		select(0,0);
+		
 		System.out.println(ans);
 	}
 
-	public static void select(int idx, int k){
-		if(k == 3){
-			init();
-			for(int i = 0; i < 3; i++) {
-				Pair p = area.get(wall[i]);
-				arr_copy[p.x][p.y] = 1;
-			}
-			ans = Math.max(ans, bfs());
-			return;
-		}
-
-		for(int i = idx; i < area.size(); i++){
-			wall[k] = i;
-			select(i + 1, k + 1);
-		}
-	}
-
-	public static void init(){
-		for(int i = 0; i < n; i++){
-			Arrays.fill(visited[i], 0);
-			for(int j = 0; j < m; j++) {
-				arr_copy[i][j] = arr[i][j];
-			}
-		}
-	}
-
 	public static int bfs(){
-		Deque<Pair> dq = new ArrayDeque<>();
+		ArrayDeque<Pair> dq = new ArrayDeque();
 		for(Pair v : virus) dq.addLast(v);
 
 		while(!dq.isEmpty()){
@@ -82,18 +64,27 @@ class Main {
 			for(int i = 0; i < 4; i++){
 				int nx = cur.x + dx[i];
 				int ny = cur.y + dy[i];
-				if(nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
-				if(arr_copy[nx][ny] != 0 || visited[nx][ny] == 1) continue;
-				visited[nx][ny] = 1;
-				arr_copy[nx][ny] = 2;
+				if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+				if(arr[nx][ny] == 1 || arr[nx][ny] == 2) continue;
+				arr[nx][ny] = 2;
 				dq.addLast(new Pair(nx,ny));
 			}
 		}
 		
-		int safe = 0;
-		for(int[] tmp : arr_copy){
-			for(int k : tmp) if(k == 0) safe++;
+		int cnt = 0;
+		for(int i = 0; i < n; i++){
+			for(int j = 0; j < m; j++){
+				if(arr[i][j] == 0) cnt++;
+			}
 		}
-		return safe;
+		return cnt;
+	}
+
+	public static void init(){
+		for(int i = 0; i < n; i++){
+			for(int j = 0; j < m; j++){
+				arr[i][j] = arr_copy[i][j];
+			}
+		}
 	}
 }
