@@ -4,8 +4,7 @@ class Solution {
     public int[] solution(int[] fees, String[] records) {
         //records: 시각, 차량번호, 내역
         Map<String, String> recordInOut = new HashMap<>();
-        Map<String, Integer> recordMin = new HashMap<>();
-        Set<String> carNums = new HashSet<>();
+        TreeMap<String, Integer> recordMin = new TreeMap<>();
         
         for(String record : records){
             String[] recordSplit = record.split(" ");
@@ -13,40 +12,29 @@ class Solution {
             String carNum = recordSplit[1];
             String inOrOut = recordSplit[2];
             
-            if(inOrOut.equals("IN")){
-                recordInOut.put(carNum, time);
-                carNums.add(carNum);
-            }else{
+            if(inOrOut.equals("IN")) recordInOut.put(carNum, time);
+            else{
                 String inTime = recordInOut.get(carNum);
                 int min = calMin(inTime, time);
-                recordMin.put(carNum, recordMin.getOrDefault(carNum, 0) + min);
                 recordInOut.remove(carNum);
+                recordMin.put(carNum, recordMin.getOrDefault(carNum, 0) + min);
             }
         }
         
-        for(String carNum : carNums){
-            if(recordInOut.containsKey(carNum)){
-                String inTime = recordInOut.get(carNum);
-                int min = calMin(inTime, "23:59");
-                recordMin.put(carNum, recordMin.getOrDefault(carNum, 0) + min);
-            }
+        for(var entry : recordInOut.entrySet()){
+            int min = calMin(entry.getValue(), "23:59");
+            recordMin.put(entry.getKey(), 
+                          recordMin.getOrDefault(entry.getKey(),0) + min);
         }
         
         //차량 번호가 작은 자동차부터 청구할 주차 요금을 차례대로
-        String[][] arr = new String[carNums.size()][2];
+        int[] ans = new int[recordMin.size()];
         
         int idx = 0;
-        for(String carNum : carNums){
-            arr[idx][0] = carNum;
-            arr[idx][1] = calFee(fees, recordMin.get(carNum)) + "";
-            idx++;
+        for(var entry : recordMin.entrySet()){
+            ans[idx++] = calFee(fees, recordMin.get(entry.getKey()));
         }
         
-        Arrays.sort(arr,(a,b) -> a[0].compareTo(b[0]));
-        int[] ans = new int[carNums.size()];
-        for(int i = 0; i < carNums.size(); i++){
-            ans[i] = Integer.parseInt(arr[i][1]);
-        }
         return ans;
     }
     
