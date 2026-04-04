@@ -1,129 +1,178 @@
 import java.io.*;
 import java.util.*;
-
 class Main {
-	public static int n,m;
-	public static int ans = 64; //정답 최대값
-	public static int[][] arr;
-	public static int[] dx = {-1,1,0,0}; //북남서동
-	public static int[] dy = {0,0,-1,1};
-	public static boolean inrange(int x, int y){
-		return x >= 0 && x < n && y >=0 && y < m;
+	static int n,m,ans;
+	static int[][] arr;
+	static List<Pair> cctv = new ArrayList<>();
+	static class Pair{
+		int x; int y; int cctv;
+		public Pair(int x, int y,int cctv){
+			this.x = x; this.y = y; this.cctv = cctv;
+		}
 	}
-	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
-		arr = new int[n][m];
+		ans = n * m;
+		int[][] arr = new int[n][m];
+		
 		for(int i = 0; i < n; i++){
-			StringTokenizer st2 = new StringTokenizer(br.readLine());
-			for(int j = 0; j < m; j++){
-				arr[i][j] = Integer.parseInt(st2.nextToken());
+			st = new StringTokenizer(br.readLine());
+			for(int j = 0; j < m; j++) {
+				arr[i][j] = Integer.parseInt(st.nextToken());
+				if(arr[i][j] != 0 && arr[i][j] != 6) {
+					cctv.add(new Pair(i,j,arr[i][j]));
+				}
 			}
 		}
-		go(0,0);
+		go(arr, 0);
 		System.out.println(ans);
 	}
-	
-	public static void go(int i, int j){
-		if (i == n) { 
-			cnt0();
+
+	static void go(int[][] arr, int idx){
+		if(idx == cctv.size()) {
+			int cnt = 0;
+			for(int i = 0; i < n; i++){
+				for(int j = 0; j < m; j++) if(arr[i][j] == 0) cnt++;
+			}
+			ans = Math.min(ans, cnt);
 			return;
 		}
 		
-		int nextX = (j + 1 == m) ? i + 1 : i;
-		int nextY = (j + 1 == m) ? 0 : j + 1;
-		
-		if (arr[i][j] >= 1 && arr[i][j] <= 5){
-			int[][] backup = new int[n][m];
-			for (int k = 0; k < n; k++) backup[k] = arr[k].clone(); 
-			int type = arr[i][j];
-			
-			if(type == 1){
-				up1(i,j); go(nextX, nextY); restore(backup);
-				left1(i,j); go(nextX, nextY); restore(backup);
-				down1(i,j); go(nextX, nextY); restore(backup);
-				right1(i,j); go(nextX, nextY); restore(backup);
+		int cctvX = cctv.get(idx).x;
+		int cctvY = cctv.get(idx).y;
+		int cctvNum = cctv.get(idx).cctv;
+
+		if(cctvNum == 1){
+			for(int i = 0; i < 4; i++){
+				cctv1(arr,cctvX,cctvY,i,false);
+				go(arr, idx + 1);
+				cctv1(arr,cctvX,cctvY,i,true);
 			}
-			
-			if(type == 2){
-				left1(i,j); right1(i,j); go(nextX, nextY); restore(backup);
-				up1(i,j); down1(i,j); go(nextX, nextY); restore(backup);
+		}else if(cctvNum == 2){
+			for(int i = 0; i < 2; i++){
+				cctv2(arr,cctvX,cctvY,i,false);
+				go(arr, idx + 1);
+				cctv2(arr,cctvX,cctvY,i,true);
 			}
-			
-			if(type == 3){
-				up1(i,j); right1(i,j); go(nextX, nextY); restore(backup);
-				right1(i,j); down1(i,j); go(nextX, nextY); restore(backup);
-				down1(i,j); left1(i,j); go(nextX, nextY); restore(backup);
-				left1(i,j); up1(i,j); go(nextX, nextY); restore(backup);
+		}else if(cctvNum == 3){
+			for(int i = 0; i < 4; i++){
+				cctv3(arr,cctvX,cctvY,i,false);
+				go(arr, idx + 1);
+				cctv3(arr,cctvX,cctvY,i,true);
 			}
-			
-			if(type == 4){
-				up1(i,j); right1(i,j); left1(i,j); go(nextX, nextY); restore(backup);
-				up1(i,j); right1(i,j); down1(i,j); go(nextX, nextY); restore(backup);
-				right1(i,j); down1(i,j); left1(i,j); go(nextX, nextY); restore(backup);
-				down1(i,j); left1(i,j); up1(i,j); go(nextX, nextY); restore(backup);
+		}else if(cctvNum == 4){
+			for(int i = 0; i < 4; i++){
+				cctv4(arr,cctvX,cctvY,i,false);
+				go(arr, idx + 1);
+				cctv4(arr,cctvX,cctvY,i,true);
 			}
-			
-			if(type == 5){
-				up1(i,j); right1(i,j); left1(i,j); down1(i,j);
-				go(nextX, nextY); restore(backup);
-			}
-		}else {
-			go(nextX, nextY);
+		}else if(cctvNum == 5){
+			cctv5(arr,cctvX,cctvY,false);
+			go(arr, idx + 1);
+			cctv5(arr,cctvX,cctvY,true);
 		}
 	}
-	
-	///-1은 cctv가 감지 가능한 구역
-	public static void up1(int x, int y){
-		while(inrange(x,y)){
-			if(arr[x][y] == 6) break;
-			if(arr[x][y] <= 0) arr[x][y] = -1;
-			x += dx[0];
-			y += dy[0];
+
+	static void cctv1(int[][] arr, int cctvX, int cctvY, int dir, boolean isRecover){
+		if(dir == 0) detected(arr, cctvX, cctvY, 0, isRecover);
+		else if(dir == 1) detected(arr, cctvX, cctvY, 1, isRecover);
+		else if(dir == 2) detected(arr, cctvX, cctvY, 2, isRecover);
+		else if(dir == 3) detected(arr, cctvX, cctvY, 3, isRecover);
+	}
+
+	static void cctv2(int[][] arr, int cctvX, int cctvY,int dir, boolean isRecover){
+		if(dir == 0){
+			detected(arr, cctvX, cctvY, 0, isRecover);
+			detected(arr, cctvX, cctvY, 1, isRecover);
+		}else if(dir == 1){
+			detected(arr, cctvX, cctvY, 2, isRecover);
+			detected(arr, cctvX, cctvY, 3, isRecover);
 		}
 	}
-	
-	public static void down1(int x, int y){
-		while(inrange(x,y)){
-			if(arr[x][y] == 6) break;
-			if(arr[x][y] <= 0) arr[x][y] = -1;
-			x += dx[1];
-			y += dy[1];
+
+	static void cctv3(int[][] arr, int cctvX, int cctvY,int dir, boolean isRecover){
+		if(dir == 0){
+			detected(arr, cctvX, cctvY, 2, isRecover);
+			detected(arr, cctvX, cctvY, 0, isRecover);
+		}else if(dir == 1){
+			detected(arr, cctvX, cctvY, 0, isRecover);
+			detected(arr, cctvX, cctvY, 3, isRecover);
+		}
+		else if(dir == 2){
+			detected(arr, cctvX, cctvY, 3, isRecover);
+			detected(arr, cctvX, cctvY, 1, isRecover);
+		}
+		else if(dir == 3){
+			detected(arr, cctvX, cctvY, 1, isRecover);
+			detected(arr, cctvX, cctvY, 2, isRecover);
 		}
 	}
-	
-	public static void left1(int x, int y){
-		while(inrange(x,y)){
-			if(arr[x][y] == 6) break;
-			if(arr[x][y] <= 0) arr[x][y] = -1;
-			x += dx[2];
-			y += dy[2];
+
+	static void cctv4(int[][] arr, int cctvX, int cctvY,int dir, boolean isRecover){
+		if(dir == 0){
+			detected(arr, cctvX, cctvY, 2, isRecover);
+			detected(arr, cctvX, cctvY, 0, isRecover);
+			detected(arr, cctvX, cctvY, 3, isRecover);
+		}else if(dir == 1){
+			detected(arr, cctvX, cctvY, 0, isRecover);
+			detected(arr, cctvX, cctvY, 3, isRecover);
+			detected(arr, cctvX, cctvY, 1, isRecover);
+		}
+		else if(dir == 2){
+			detected(arr, cctvX, cctvY, 3, isRecover);
+			detected(arr, cctvX, cctvY, 1, isRecover);
+			detected(arr, cctvX, cctvY, 2, isRecover);
+		}
+		else if(dir == 3){
+			detected(arr, cctvX, cctvY, 1, isRecover);
+			detected(arr, cctvX, cctvY, 2, isRecover);
+			detected(arr, cctvX, cctvY, 0, isRecover);
 		}
 	}
-	
-	public static void right1(int x, int y){
-		while(inrange(x,y)){
-			if(arr[x][y] == 6) break;
-			if(arr[x][y] <= 0) arr[x][y] = -1;
-			x += dx[3];
-			y += dy[3];
-		}
+
+	static void cctv5(int[][] arr, int cctvX, int cctvY,boolean isRecover){
+		detected(arr, cctvX, cctvY, 0, isRecover);
+		detected(arr, cctvX, cctvY, 1, isRecover);
+		detected(arr, cctvX, cctvY, 2, isRecover);
+		detected(arr, cctvX, cctvY, 3, isRecover);
 	}
-	
-	public static void restore(int[][] backup) {
-		for (int i = 0; i < n; i++) arr[i] = backup[i].clone();
-	}
-	
-	public static void cnt0(){
-		int cnt = 0;
-		for(int i = 0; i < n; i++){
-			for(int j = 0; j < m; j++){
-				if(arr[i][j] == 0) cnt++;
+
+	static void detected(int[][] arr, int cctvX, int cctvY, int dir, boolean isRecover){
+		if(dir == 0){ //우
+			for(int i = cctvY; i < m; i++){
+				if(arr[cctvX][i] == 6) break;
+				if(arr[cctvX][i] <= 0){
+					if(isRecover) arr[cctvX][i]++;
+					else arr[cctvX][i]--;
+				}
+			}
+		}else if(dir == 1){ //좌
+			for(int i = cctvY; i >=0; i--){
+				if(arr[cctvX][i] == 6) break;
+				if(arr[cctvX][i] <= 0){
+					if(isRecover) arr[cctvX][i]++;
+					else arr[cctvX][i]--;
+				}
+			}
+		}else if(dir == 2){ //상
+			for(int i = cctvX; i >= 0; i--){
+				if(arr[i][cctvY] == 6) break;
+				if(arr[i][cctvY] <= 0){
+					if(isRecover) arr[i][cctvY]++;
+					else arr[i][cctvY]--;
+				}
+			}
+		}else if(dir == 3){ //하
+			for(int i = cctvX; i < n; i++){
+				if(arr[i][cctvY] == 6) break;
+				if(arr[i][cctvY] <= 0) {
+					if(isRecover) arr[i][cctvY]++;
+					else arr[i][cctvY]--;
+				}
 			}
 		}
-		ans = Math.min(cnt,ans);
 	}
 }
