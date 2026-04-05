@@ -6,10 +6,16 @@ SELECT
 from MEMBER_PROFILE P
 join REST_REVIEW R
 on P.MEMBER_ID = R.MEMBER_ID
-where P.MEMBER_ID = 
-    (select 
-        MEMBER_ID 
+where P.MEMBER_ID in (
+    select MEMBER_ID
     from REST_REVIEW
     group by MEMBER_ID
-    order by count(*) desc limit 1)
-order by REVIEW_DATE, R.REVIEW_TEXT;
+    having count(*) = (
+        select max(cnt)
+        from (
+            select count(*) cnt
+            from REST_REVIEW
+            group by MEMBER_ID
+        ) t
+    )
+) order by REVIEW_DATE,  R.REVIEW_TEXT;
