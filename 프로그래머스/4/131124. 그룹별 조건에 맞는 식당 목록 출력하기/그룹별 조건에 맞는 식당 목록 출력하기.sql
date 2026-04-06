@@ -11,10 +11,12 @@ WHERE P.MEMBER_ID in (
     FROM REST_REVIEW
     GROUP BY MEMBER_ID
     HAVING COUNT(*) = (
-        SELECT COUNT(*)
-        FROM REST_REVIEW
-        GROUP BY MEMBER_ID
-        ORDER BY COUNT(*) desc limit 1
+        SELECT MAX(CNT)
+        FROM (
+            SELECT COUNT(*) CNT
+            FROM REST_REVIEW
+            GROUP BY MEMBER_ID
+        ) T
     )
 )
 ORDER BY R.REVIEW_DATE, R.REVIEW_TEXT;
