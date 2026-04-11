@@ -35,11 +35,11 @@ class Main {
 	}
 
 	static void go(int k, int idx){
-		if(k > 0 && k <= m){
+		if(k == m){
 			int tmp = calChickenLoad();
 			ans = Math.min(ans,tmp);
+            return;
 		}
-		if(k == m) return;
 		
 		for(int i = idx; i < chicken.size(); i++){
 			if(used[i]) continue;
