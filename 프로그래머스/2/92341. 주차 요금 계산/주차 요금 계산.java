@@ -1,71 +1,75 @@
 import java.util.*;
 
 class Solution {
+    static int basicTime, basicMoney, perTime, perMoney;
+    
     public int[] solution(int[] fees, String[] records) {
-        //records: 시각, 차량번호, 내역
-        Map<String, String> recordInOut = new HashMap<>();
-        TreeMap<String, Integer> recordMin = new TreeMap<>();
+        basicTime = fees[0];
+        basicMoney = fees[1];
+        perTime = fees[2];
+        perMoney = fees[3];
+        
+        Map<String, String> inOutLog = new HashMap<>();
+        Map<String, Integer> carTimes = new HashMap<>();
         
         for(String record : records){
-            String[] recordSplit = record.split(" ");
-            String time = recordSplit[0];
-            String carNum = recordSplit[1];
-            String inOrOut = recordSplit[2];
+            String[] recordSp = record.split(" ");
+            String time = recordSp[0];
+            String carNum = recordSp[1];
+            String inOrOut = recordSp[2];
             
-            if(inOrOut.equals("IN")) recordInOut.put(carNum, time);
+            if(inOrOut.equals("IN")) inOutLog.put(carNum, time);
             else{
-                String inTime = recordInOut.get(carNum);
-                int min = calMin(inTime, time);
-                recordInOut.remove(carNum);
-                recordMin.put(carNum, recordMin.getOrDefault(carNum, 0) + min);
+                int timeDiff = diffMinute(inOutLog.get(carNum), time);
+                carTimes.put(carNum, carTimes.getOrDefault(carNum, 0) + timeDiff);
+                inOutLog.remove(carNum);
             }
         }
         
-        for(var entry : recordInOut.entrySet()){
-            int min = calMin(entry.getValue(), "23:59");
-            recordMin.put(entry.getKey(), 
-                          recordMin.getOrDefault(entry.getKey(),0) + min);
+        for(var log : inOutLog.entrySet()){
+            String carNum = log.getKey();
+            String inTime = log.getValue();
+            
+            int timeDiff = diffMinute(inTime, "23:59");
+            carTimes.put(carNum, carTimes.getOrDefault(carNum, 0) + timeDiff);
         }
         
-        //차량 번호가 작은 자동차부터 청구할 주차 요금을 차례대로
-        int[] ans = new int[recordMin.size()];
+        Map<String, Integer> carFees = new TreeMap<>();
         
+        for(var carTime : carTimes.entrySet()){
+            String carNum = carTime.getKey();
+            int time = carTime.getValue();
+            
+            int finalFee = calFee(time);
+            carFees.put(carNum, finalFee);
+        }
+        
+        int[] answer = new int[carFees.size()];
         int idx = 0;
-        for(var entry : recordMin.entrySet()){
-            ans[idx++] = calFee(fees, recordMin.get(entry.getKey()));
-        }
-        
-        return ans;
+        for(var carFee : carFees.entrySet()) answer[idx++] = carFee.getValue();
+        return answer;
     }
     
-    //시간 차 계산
-    public int calMin(String in, String out){
-        String[] inSplit = in.split(":");
-        String[] outSplit = out.split(":");
+    
+    public int diffMinute(String inTime, String outTime){
+        String[] inTimeSplit = inTime.split(":");
+        String[] outTimeSplit = outTime.split(":");
         
-        int inH = Integer.parseInt(inSplit[0]);
-        int inM = Integer.parseInt(inSplit[1]);
-        int outH = Integer.parseInt(outSplit[0]);
-        int outM = Integer.parseInt(outSplit[1]);
+        int inTimeH = Integer.parseInt(inTimeSplit[0]);
+        int inTimeM = Integer.parseInt(inTimeSplit[1]);
         
-        if(outM >= inM) {
-            return (outH - inH) * 60 + (outM - inM);
-        }
+        int outTimeH = Integer.parseInt(outTimeSplit[0]);
+        int outTimeM = Integer.parseInt(outTimeSplit[1]);
+        
+        return (outTimeH * 60 + outTimeM) - (inTimeH * 60 + inTimeM);
+    }
+    
+    public int calFee(int minute){
+        if(minute <= basicTime) return basicMoney;
         else{
-            return (outH - inH - 1) * 60  + outM - inM + 60;
+            int overTime = (minute - basicTime) / perTime;
+            if((minute - basicTime) % perTime != 0) overTime++;
+            return basicMoney + overTime * perMoney;
         }
-    }
-    
-    public int calFee(int[] fees, int min){
-        //fees: 기본 시간(분),기본 요금(원),단위 시간(분),단위 요금(원)
-        int fee = 0;
-        if(min > fees[0]){
-            min -= fees[0];
-            int per = min / fees[2];
-            int remain = min % fees[2];
-            if(remain != 0) per++;
-            fee = fees[1] + per * fees[3];
-        }else fee += fees[1];
-        return fee;
     }
 }
