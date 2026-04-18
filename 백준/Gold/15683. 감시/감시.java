@@ -1,178 +1,202 @@
 import java.io.*;
 import java.util.*;
+
 class Main {
 	static int n,m,ans;
 	static int[][] arr;
-	static List<Pair> cctv = new ArrayList<>();
-	static class Pair{
-		int x; int y; int cctv;
-		public Pair(int x, int y,int cctv){
-			this.x = x; this.y = y; this.cctv = cctv;
-		}
-	}
+	static List<int[]> cctvs = new ArrayList<>();
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
 		ans = n * m;
-		int[][] arr = new int[n][m];
-		
+		arr = new int[n][m];
 		for(int i = 0; i < n; i++){
 			st = new StringTokenizer(br.readLine());
 			for(int j = 0; j < m; j++) {
 				arr[i][j] = Integer.parseInt(st.nextToken());
-				if(arr[i][j] != 0 && arr[i][j] != 6) {
-					cctv.add(new Pair(i,j,arr[i][j]));
-				}
+				if(arr[i][j] != 0 && arr[i][j] != 6) cctvs.add(new int[]{i,j});
 			}
 		}
-		go(arr, 0);
+
+		go(0);
 		System.out.println(ans);
 	}
 
-	static void go(int[][] arr, int idx){
-		if(idx == cctv.size()) {
+	static void go(int idx){
+		if(idx == cctvs.size()){
 			int cnt = 0;
 			for(int i = 0; i < n; i++){
-				for(int j = 0; j < m; j++) if(arr[i][j] == 0) cnt++;
+				for(int j = 0; j < m; j++) {
+					if(arr[i][j] == 0) cnt++;
+				}
 			}
 			ans = Math.min(ans, cnt);
 			return;
-		}
-		
-		int cctvX = cctv.get(idx).x;
-		int cctvY = cctv.get(idx).y;
-		int cctvNum = cctv.get(idx).cctv;
+		} 
 
-		if(cctvNum == 1){
-			for(int i = 0; i < 4; i++){
-				cctv1(arr,cctvX,cctvY,i,false);
-				go(arr, idx + 1);
-				cctv1(arr,cctvX,cctvY,i,true);
-			}
-		}else if(cctvNum == 2){
-			for(int i = 0; i < 2; i++){
-				cctv2(arr,cctvX,cctvY,i,false);
-				go(arr, idx + 1);
-				cctv2(arr,cctvX,cctvY,i,true);
-			}
-		}else if(cctvNum == 3){
-			for(int i = 0; i < 4; i++){
-				cctv3(arr,cctvX,cctvY,i,false);
-				go(arr, idx + 1);
-				cctv3(arr,cctvX,cctvY,i,true);
-			}
-		}else if(cctvNum == 4){
-			for(int i = 0; i < 4; i++){
-				cctv4(arr,cctvX,cctvY,i,false);
-				go(arr, idx + 1);
-				cctv4(arr,cctvX,cctvY,i,true);
-			}
-		}else if(cctvNum == 5){
-			cctv5(arr,cctvX,cctvY,false);
-			go(arr, idx + 1);
-			cctv5(arr,cctvX,cctvY,true);
+		int x = cctvs.get(idx)[0];
+		int y = cctvs.get(idx)[1];
+		int cctvNums = arr[x][y];
+
+		if(cctvNums == 1){
+			upWorker(x,y,false);
+			go(idx + 1);
+			upWorker(x,y,true);
+			
+			downWorker(x,y,false);
+			go(idx + 1);
+			downWorker(x,y,true);
+			
+			leftWorker(x,y,false);
+			go(idx + 1);
+			leftWorker(x,y,true);
+			
+			rightWorker(x,y,false);
+			go(idx + 1);
+			rightWorker(x,y,true);
+			
+		}else if(cctvNums == 2){
+			upWorker(x,y,false);
+			downWorker(x,y,false);
+			go(idx + 1);
+			upWorker(x,y,true);
+			downWorker(x,y,true);
+
+			leftWorker(x,y,false);
+			rightWorker(x,y,false);
+			go(idx + 1);
+			leftWorker(x,y,true);
+			rightWorker(x,y,true);
+		}else if(cctvNums == 3){
+			//상우
+			upWorker(x,y,false);
+			rightWorker(x,y,false);
+			go(idx + 1);
+			upWorker(x,y,true);
+			rightWorker(x,y,true);
+
+			//우하
+			downWorker(x,y,false);
+			rightWorker(x,y,false);
+			go(idx + 1);
+			downWorker(x,y,true);
+			rightWorker(x,y,true);
+
+			//하좌
+			downWorker(x,y,false);
+			leftWorker(x,y,false);
+			go(idx + 1);
+			downWorker(x,y,true);
+			leftWorker(x,y,true);
+
+			//좌상
+			upWorker(x,y,false);
+			leftWorker(x,y,false);
+			go(idx + 1);
+			upWorker(x,y,true);
+			leftWorker(x,y,true);
+		}else if(cctvNums == 4){
+			//상좌우
+			upWorker(x,y,false);
+			leftWorker(x,y,false);
+			rightWorker(x,y,false);
+			go(idx + 1);
+			upWorker(x,y,true);
+			leftWorker(x,y,true);
+			rightWorker(x,y,true);
+
+			//상우하
+			upWorker(x,y,false);
+			downWorker(x,y,false);
+			rightWorker(x,y,false);
+			go(idx + 1);
+			upWorker(x,y,true);
+			downWorker(x,y,true);
+			rightWorker(x,y,true);
+
+			//좌하우
+			downWorker(x,y,false);
+			leftWorker(x,y,false);
+			rightWorker(x,y,false);
+			go(idx + 1);
+			downWorker(x,y,true);
+			leftWorker(x,y,true);
+			rightWorker(x,y,true);
+
+			//하좌상
+			upWorker(x,y,false);
+			downWorker(x,y,false);
+			leftWorker(x,y,false);
+			go(idx + 1);
+			upWorker(x,y,true);
+			downWorker(x,y,true);
+			leftWorker(x,y,true);
+		}else if(cctvNums == 5){
+			upWorker(x,y,false);
+			downWorker(x,y,false);
+			leftWorker(x,y,false);
+			rightWorker(x,y,false);
+			go(idx + 1);
+			upWorker(x,y,true);
+			downWorker(x,y,true);
+			leftWorker(x,y,true);
+			rightWorker(x,y,true);
 		}
 	}
 
-	static void cctv1(int[][] arr, int cctvX, int cctvY, int dir, boolean isRecover){
-		if(dir == 0) detected(arr, cctvX, cctvY, 0, isRecover);
-		else if(dir == 1) detected(arr, cctvX, cctvY, 1, isRecover);
-		else if(dir == 2) detected(arr, cctvX, cctvY, 2, isRecover);
-		else if(dir == 3) detected(arr, cctvX, cctvY, 3, isRecover);
-	}
 
-	static void cctv2(int[][] arr, int cctvX, int cctvY,int dir, boolean isRecover){
-		if(dir == 0){
-			detected(arr, cctvX, cctvY, 0, isRecover);
-			detected(arr, cctvX, cctvY, 1, isRecover);
-		}else if(dir == 1){
-			detected(arr, cctvX, cctvY, 2, isRecover);
-			detected(arr, cctvX, cctvY, 3, isRecover);
-		}
-	}
-
-	static void cctv3(int[][] arr, int cctvX, int cctvY,int dir, boolean isRecover){
-		if(dir == 0){
-			detected(arr, cctvX, cctvY, 2, isRecover);
-			detected(arr, cctvX, cctvY, 0, isRecover);
-		}else if(dir == 1){
-			detected(arr, cctvX, cctvY, 0, isRecover);
-			detected(arr, cctvX, cctvY, 3, isRecover);
-		}
-		else if(dir == 2){
-			detected(arr, cctvX, cctvY, 3, isRecover);
-			detected(arr, cctvX, cctvY, 1, isRecover);
-		}
-		else if(dir == 3){
-			detected(arr, cctvX, cctvY, 1, isRecover);
-			detected(arr, cctvX, cctvY, 2, isRecover);
-		}
-	}
-
-	static void cctv4(int[][] arr, int cctvX, int cctvY,int dir, boolean isRecover){
-		if(dir == 0){
-			detected(arr, cctvX, cctvY, 2, isRecover);
-			detected(arr, cctvX, cctvY, 0, isRecover);
-			detected(arr, cctvX, cctvY, 3, isRecover);
-		}else if(dir == 1){
-			detected(arr, cctvX, cctvY, 0, isRecover);
-			detected(arr, cctvX, cctvY, 3, isRecover);
-			detected(arr, cctvX, cctvY, 1, isRecover);
-		}
-		else if(dir == 2){
-			detected(arr, cctvX, cctvY, 3, isRecover);
-			detected(arr, cctvX, cctvY, 1, isRecover);
-			detected(arr, cctvX, cctvY, 2, isRecover);
-		}
-		else if(dir == 3){
-			detected(arr, cctvX, cctvY, 1, isRecover);
-			detected(arr, cctvX, cctvY, 2, isRecover);
-			detected(arr, cctvX, cctvY, 0, isRecover);
-		}
-	}
-
-	static void cctv5(int[][] arr, int cctvX, int cctvY,boolean isRecover){
-		detected(arr, cctvX, cctvY, 0, isRecover);
-		detected(arr, cctvX, cctvY, 1, isRecover);
-		detected(arr, cctvX, cctvY, 2, isRecover);
-		detected(arr, cctvX, cctvY, 3, isRecover);
-	}
-
-	static void detected(int[][] arr, int cctvX, int cctvY, int dir, boolean isRecover){
-		if(dir == 0){ //우
-			for(int i = cctvY; i < m; i++){
-				if(arr[cctvX][i] == 6) break;
-				if(arr[cctvX][i] <= 0){
-					if(isRecover) arr[cctvX][i]++;
-					else arr[cctvX][i]--;
+	//위쪽 감시
+	static void upWorker(int x, int y, boolean isRecover){
+		while(x >= 0){
+			if(arr[x][y] == 6) break;
+			if(arr[x][y] <= 0) {
+				if(!isRecover) arr[x][y]--;
+				else {
+					if(arr[x][y] != 0) arr[x][y]++;
 				}
 			}
-		}else if(dir == 1){ //좌
-			for(int i = cctvY; i >=0; i--){
-				if(arr[cctvX][i] == 6) break;
-				if(arr[cctvX][i] <= 0){
-					if(isRecover) arr[cctvX][i]++;
-					else arr[cctvX][i]--;
+			x--;
+		}
+	}
+
+	static void downWorker(int x, int y, boolean isRecover){
+		while(x < n){
+			if(arr[x][y] == 6) break;
+			if(arr[x][y] <= 0) {
+				if(!isRecover) arr[x][y]--;
+				else {
+					if(arr[x][y] != 0) arr[x][y]++;
 				}
 			}
-		}else if(dir == 2){ //상
-			for(int i = cctvX; i >= 0; i--){
-				if(arr[i][cctvY] == 6) break;
-				if(arr[i][cctvY] <= 0){
-					if(isRecover) arr[i][cctvY]++;
-					else arr[i][cctvY]--;
+			x++;
+		}
+	}
+
+	static void leftWorker(int x, int y, boolean isRecover){
+		while(y >= 0){
+			if(arr[x][y] == 6) break;
+			if(arr[x][y] <= 0) {
+				if(!isRecover) arr[x][y]--;
+				else {
+					if(arr[x][y] != 0) arr[x][y]++;
 				}
 			}
-		}else if(dir == 3){ //하
-			for(int i = cctvX; i < n; i++){
-				if(arr[i][cctvY] == 6) break;
-				if(arr[i][cctvY] <= 0) {
-					if(isRecover) arr[i][cctvY]++;
-					else arr[i][cctvY]--;
+			y--;
+		}
+	}
+
+	static void rightWorker(int x, int y, boolean isRecover){
+		while(y < m){
+			if(arr[x][y] == 6) break;
+			if(arr[x][y] <= 0) {
+				if(!isRecover) arr[x][y]--;
+				else {
+					if(arr[x][y] != 0) arr[x][y]++;
 				}
 			}
+			y++;
 		}
 	}
 }
